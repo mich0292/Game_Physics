@@ -1,0 +1,70 @@
+# TGD2251 Game Physics
+#
+# Copyright (C) by Ya-Ping Wong <ypwong@mmu.edu.my>
+# Faculty of Computing & Informatics,
+# Multimedia University
+#
+# GPhyLab_TestBed Makefile
+#
+# to use, type:
+# 			mingw32-make
+#
+# to clean up just your program, type:
+# 			mingw32-make clean
+#
+# to clean up the framework, type:
+# 			mingw32-make cleanall
+#
+CXX = g++
+CXXFLAGS = \
+	-I"C:\Box2D" \
+	-I"Framework"
+LINKFLAGS = \
+	-L"C:\Box2D\Build\Box2D" \
+	-L"C:\Box2D\Build\freeglut" \
+	-L"C:\Box2D\Build\glui" \
+	-lBox2D \
+	-lfreeglut_static \
+	-lglui -lopengl32 -lglu32 \
+	-lwinmm -lgdi32
+
+OBJS = \
+	obj\Main.o \
+	obj\Render.o \
+	obj\Test.o \
+	obj\GPhyTestBedEntries.o
+
+GPhyTestBedEntries.exe : $(OBJS)
+	echo $@
+	$(CXX) -o $@ $(OBJS) $(LINKFLAGS)
+
+obj\GPhyTestBedEntries.o : GPhyTestBedEntries.cpp obj\Test.o Framework\Test.h Framework\Render.h | obj
+	echo $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+obj\Main.o : Framework\Main.cpp Framework\Render.h Framework\Test.h | obj
+	echo $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+obj\Render.o : Framework\Render.cpp Framework\Render.h | obj
+	echo $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+obj\Test.o : Framework\Test.cpp Framework\Test.h | obj
+	echo $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+obj :
+	mkdir obj
+
+clean :
+	del obj\GPhyTestBedEntries.o
+
+cleanall :
+	del obj\*.o
+
+# $@ is The file name of the target.
+# $< is The name of the first prerequisite.
+
+# this command line works as well:
+# g++ -o GPhyTestBedEntries Framework\Main.cpp Framework\Render.cpp Framework\Test.cpp GPhyTestBedEntries.cpp -I"C:\Box2D" -I"Framework" -L"C:\Box2D\Build\Box2D" -L"C:\Box2D\Build\freeglut" -L"C:\Box2D\Build\glui" -lBox2D -lfreeglut_static -lglui -lopengl32 -lglu32 -lwinmm -lgdi32
