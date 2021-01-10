@@ -9,6 +9,9 @@ int main(){
     int windowSizeY = 600;
     sf::RenderWindow window(sf::VideoMode(windowSizeX, windowSizeY), "Game Title here");
 
+    // Set vSync to true (and as a result, we have a cap of 60FPS) - limit the framerate to a good value
+	window.setVerticalSyncEnabled(true);
+
     //Load music to play 
     sf::Music music;
     if(!music.openFromFile("filename here"))
@@ -30,6 +33,9 @@ int main(){
             if(event.type == sf::Event::Closed)
                 window.close();
         }
+
+        //activate the window for OpenGL rendering
+        window.setActive();
 
         //clear screen
         window.clear();
