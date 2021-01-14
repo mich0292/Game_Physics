@@ -15,5 +15,5 @@ class Ball
     public:
     Ball(b2World& world, float speed, float radius, sf::Vector2f position);
     void update();
-    sf::Shape getShape();
-}
+    sf::Shape& getShape();
+};

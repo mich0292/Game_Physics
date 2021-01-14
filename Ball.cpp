@@ -25,12 +25,12 @@ Ball::Ball(b2World& world, float speed, float radius, sf::Vector2f position)
     body->CreateFixture(&bodyFixtureDef);
 }
 
-Ball::update()
+void Ball::update()
 {
 
 }
 
-Ball::getShape()
+sf::Shape& Ball::getShape()
 {
     return ball;
 }
