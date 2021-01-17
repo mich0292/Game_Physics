@@ -10,10 +10,10 @@ int main()
     int windowSizeY = 600;
 
     //gravity
-    float gravity;
+    b2Vec2 gravity(0, 9.81f);
 
     //World Simulation & Clock
-    float timeStep = 1.0f/60f;
+    float timeStep = 1.0f/60.0f;
     float timeElapsedSinceLastFrame = 0;
     int32 velocityIterations = 10;
     int32 positionIterations = 8;
@@ -21,6 +21,14 @@ int main()
     
     //Box2D Variables
     b2World world(gravity);
+
+    //load the font
+    sf::Font font;
+    if(!font.loadFromFile("Assets/Font.ttf"))
+        return EXIT_FAILURE;
+
+    //Create the text
+    sf::Text text("Testing here", font, 50);
 
     //create the main window
     sf::RenderWindow window(sf::VideoMode(800, 600), "Game Title here");
@@ -42,7 +50,7 @@ int main()
         if(timeElapsedSinceLastFrame >= timeStep)
         {
             //this functions performs collision detection, integration and constraint solution
-            world.step(timeStep, velocityIterations, positionIterations);
+            world.Step(timeStep, velocityIterations, positionIterations);
             
             //Update others physics here
 
@@ -55,6 +63,7 @@ int main()
         window.clear(sf::Color(100, 149, 237));
 
         //draw here
+        window.draw(text);
 
         //Update the window
         window.display();
