@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "Wall.h"
 #include "Obstacle.h"
+#include "Player.h"
 
 int main()
 {
@@ -46,6 +47,12 @@ int main()
 
     //create the main window
     sf::RenderWindow window(sf::VideoMode(800, 600), "Game Title here");
+
+    // //Create the player
+    Player player;
+
+    //Setting up the player
+    player.settingUpPlayer(world, sf::Vector2f(15.0f, 15.0f), sf::Vector2f(windowSizeX/2,windowSizeY/2), sf::Color(255, 182, 193), sf::Color::Black, -1);
 
     //Create the wall
     Wall leftWall;
@@ -105,6 +112,9 @@ int main()
             for(int i = 0; i < obstacles.size(); i++)
                 obstacles[i].update();
 
+            //update player physics
+            player.update();
+
             //reset the time
             timeElapsedSinceLastFrame -= timeStep;
         }
@@ -124,6 +134,9 @@ int main()
         //draw obstacles
         for(int i = 0; i < obstacles.size(); i++)
                 window.draw(obstacles[i].getShape());
+
+        //draw player
+        window.draw(player.getShape());
 
         //Update the window
         window.display();
