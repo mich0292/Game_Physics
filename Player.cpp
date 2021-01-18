@@ -21,6 +21,15 @@ void Player::settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f pos
 	body->CreateFixture(&fixture);    
 }
 
+//angle in degree
+void Player::updateMovement(float angle)
+{
+    float tempAngle = body->GetAngle();
+    tempAngle = tempAngle + (angle * b2_pi/180); //convert degree to radian
+    
+    body->SetTransform(body->GetPosition(), tempAngle);         
+}
+
 void Player::update()
 {
 	// Box2D uses radians for rotation, SFML uses degree

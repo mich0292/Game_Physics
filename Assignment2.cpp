@@ -76,6 +76,20 @@ int main()
                 window.close();
         }
 
+        //check keyboard event
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        {
+            player.updateMovement(5.0f);
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        {
+            player.updateMovement(-5.0f);
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        {
+            // increase strength
+        }
+
         // (restart can get time.delta time and as seconds return value in seconds)
         deltaTime = fixedUpdateClock.restart().asSeconds();
 
