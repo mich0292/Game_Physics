@@ -2,7 +2,9 @@
 #include <Box2D/Box2D.h>
 #include <iostream>
 #include <vector>
+#include <stdlib.h>
 #include "Wall.h"
+#include "Obstacle.h"
 
 int main()
 {
@@ -21,8 +23,18 @@ int main()
     int32 positionIterations = 8;
     sf::Clock fixedUpdateClock;
     
+    //Spawn obstacle clock
+    float timeToSpawn = 1.0f;
+    float timeElapsedSinceLastSpawn = 0;
+
+    //delta time
+    float deltaTime = 0;
+
     //Box2D Variables
     b2World world(gravity);
+
+    //vector to store a list obstacles
+    std::vector<Obstacle> obstacles;
 
     //load the font
     sf::Font font;
@@ -57,8 +69,25 @@ int main()
                 window.close();
         }
 
-        //Clock things (restart can get time.delta time and as seconds return value in seconds)
-        timeElapsedSinceLastFrame += fixedUpdateClock.restart().asSeconds();
+        // (restart can get time.delta time and as seconds return value in seconds)
+        deltaTime = fixedUpdateClock.restart().asSeconds();
+
+        //Clock things
+        timeElapsedSinceLastFrame += deltaTime;
+        timeElapsedSinceLastSpawn += deltaTime;
+
+        if(timeElapsedSinceLastSpawn >= timeToSpawn)
+        {
+            //create new obstacle
+            Obstacle temp;
+            float tempX = rand() % windowSizeX;
+            float tempY = rand() % windowSizeY;
+            temp.settingUpObstacle(world, 15.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
+            obstacles.push_back(temp);
+            
+            //reset the time
+            timeElapsedSinceLastSpawn -= timeToSpawn;
+        }
 
         //Update physics after reach the time step
         if(timeElapsedSinceLastFrame >= timeStep)
@@ -71,6 +100,10 @@ int main()
             rightWall.update();
             topWall.update();
             bottomWall.update();
+
+            //update obstacles physics
+            for(int i = 0; i < obstacles.size(); i++)
+                obstacles[i].update();
 
             //reset the time
             timeElapsedSinceLastFrame -= timeStep;
@@ -87,6 +120,10 @@ int main()
         window.draw(rightWall.getShape());
         window.draw(topWall.getShape());
         window.draw(bottomWall.getShape());
+
+        //draw obstacles
+        for(int i = 0; i < obstacles.size(); i++)
+                window.draw(obstacles[i].getShape());
 
         //Update the window
         window.display();
