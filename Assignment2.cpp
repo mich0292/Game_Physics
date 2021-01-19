@@ -21,7 +21,6 @@ int main()
     sf::View view;
     view.reset(sf::FloatRect(0,0, windowSizeX, windowSizeY));
     view.setViewport(sf::FloatRect(0.0f, 0.0f, 1.0f, 1.0f));
-    window.setView(view);
 
     //gravity
     b2Vec2 gravity(0, 9.81f);
@@ -71,7 +70,7 @@ int main()
 
     //load background
     sf::Texture backgroundTexture;
-    if(!backgroundTexture.loadFromFile("Assets/background.jpeg"))
+    if(!backgroundTexture.loadFromFile("Assets/background.jpg"))
         return EXIT_FAILURE;
     sf::Sprite background(backgroundTexture);
 
@@ -115,6 +114,11 @@ int main()
             if(event.type == sf::Event::Closed)
                 window.close();
         }
+
+        //moving background
+        view.move(100.0f, 100.0f);
+
+        //window.setView(view);
 
         // (restart can get time.delta time and as seconds return value in seconds)
         deltaTime = fixedUpdateClock.restart().asSeconds();
