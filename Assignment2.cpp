@@ -6,7 +6,9 @@
 #include "Wall.h"
 #include "Obstacle.h"
 #include "Player.h"
+#include "Strength.h"
 
+//compile assignment2.cpp player.cpp wall.cpp obstacle.cpp strength.cpp
 int main()
 {
     //Window size
@@ -28,6 +30,13 @@ int main()
     float timeToSpawn = 1.0f;
     float timeElapsedSinceLastSpawn = 0;
 
+    //Strength clock & variables
+    float timeToIncreaseStrength = 1.0f;
+    float timeElapsedSinceLastIncrease = 0;
+    int totalTimePressed = 0;
+    int maxTimePressed = 5;
+    b2Vec2 forcePerStrength(10, 10);
+
     //delta time
     float deltaTime = 0;
 
@@ -36,6 +45,7 @@ int main()
 
     //vector to store a list obstacles
     std::vector<Obstacle> obstacles;
+    std::vector<Strength> strength;
 
     //load the font
     sf::Font font;
@@ -48,11 +58,11 @@ int main()
     //create the main window
     sf::RenderWindow window(sf::VideoMode(800, 600), "Game Title here");
 
-    // //Create the player
+    //Create the player
     Player player;
 
     //Setting up the player
-    player.settingUpPlayer(world, sf::Vector2f(15.0f, 15.0f), sf::Vector2f(windowSizeX/2,windowSizeY/2), sf::Color(255, 182, 193), sf::Color::Black, -1);
+    player.settingUpPlayer(world, sf::Vector2f(30.0f, 30.0f), sf::Vector2f(windowSizeX/2,windowSizeY/2), sf::Color(255, 182, 193), sf::Color::Black, -1);
 
     //Create the wall
     Wall leftWall;
@@ -66,6 +76,15 @@ int main()
     topWall.settingUpWall(world, sf::Vector2f(windowSizeX, windowBorderSize), sf::Vector2f(windowSizeX/2,windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
     bottomWall.settingUpWall(world, sf::Vector2f(windowSizeX, windowBorderSize), sf::Vector2f(windowSizeX/2,windowSizeY-windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
 
+    //Creating and setting up strength
+    for(int i = 0, posY = 400; i < 5; i++, posY -= 30)
+    {
+        Strength temp;
+        temp.settingUpStrength(world, sf::Vector2f(15.0f, 15.0f), sf::Vector2f(50.0f, posY), sf::Color(0, 255, 0), sf::Color::Black, -1);
+        strength.push_back(temp);
+    }
+
+    //Game loop
     while(window.isOpen())
     {
         sf::Event event;
@@ -76,22 +95,46 @@ int main()
                 window.close();
         }
 
+        // (restart can get time.delta time and as seconds return value in seconds)
+        deltaTime = fixedUpdateClock.restart().asSeconds();
+        
         //check keyboard event
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
         {
-            player.updateMovement(5.0f);
+            player.updateAngle(5.0f);
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
         {
-            player.updateMovement(-5.0f);
+            player.updateAngle(-5.0f);
         }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         {
-            // increase strength
-        }
+            //clock things
+            timeElapsedSinceLastIncrease += deltaTime;
 
-        // (restart can get time.delta time and as seconds return value in seconds)
-        deltaTime = fixedUpdateClock.restart().asSeconds();
+            if(timeElapsedSinceLastIncrease >= timeToIncreaseStrength)
+            {
+                totalTimePressed++;
+
+                //reset the time
+                if(totalTimePressed > maxTimePressed * 2)
+                    totalTimePressed = 0;
+                timeElapsedSinceLastIncrease -= timeToIncreaseStrength;
+            }
+        }
+        else
+        {
+            totalTimePressed = 0;
+            timeElapsedSinceLastIncrease = 0;
+
+            float temp = totalTimePressed;
+
+            if(totalTimePressed > maxTimePressed)
+                temp = maxTimePressed - (temp - maxTimePressed);
+
+            player.updateMovement(temp * forcePerStrength);
+        }
 
         //Clock things
         timeElapsedSinceLastFrame += deltaTime;
@@ -147,10 +190,19 @@ int main()
 
         //draw obstacles
         for(int i = 0; i < obstacles.size(); i++)
-                window.draw(obstacles[i].getShape());
+            window.draw(obstacles[i].getShape());
 
         //draw player
         window.draw(player.getShape());
+
+        //draw strength
+        float temp = totalTimePressed;
+
+        if(totalTimePressed > maxTimePressed)
+            temp = maxTimePressed - (temp - maxTimePressed);
+        
+        for(int i = 0; i < temp; i++)
+            window.draw(strength[i].getShape());
 
         //Update the window
         window.display();

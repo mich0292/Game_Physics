@@ -11,7 +11,7 @@ void Player::settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f pos
     player.setOutlineThickness(thickness);
 
     bodyDef.position = b2Vec2(position.x/PIXEL_PER_METER, position.y/PIXEL_PER_METER);
-    bodyDef.type = b2_kinematicBody;
+    bodyDef.type = b2_dynamicBody;
 
     shape.SetAsBox((size.x/2)/PIXEL_PER_METER, (size.y/2)/PIXEL_PER_METER);
 
@@ -22,12 +22,17 @@ void Player::settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f pos
 }
 
 //angle in degree
-void Player::updateMovement(float angle)
+void Player::updateAngle(float angle)
 {
     float tempAngle = body->GetAngle();
     tempAngle = tempAngle + (angle * b2_pi/180); //convert degree to radian
     
     body->SetTransform(body->GetPosition(), tempAngle);         
+}
+
+void Player::updateMovement(b2Vec2 force)
+{
+    body->ApplyForceToCenter(force, true);
 }
 
 void Player::update()
