@@ -11,11 +11,18 @@
 //compile assignment2.cpp player.cpp wall.cpp obstacle.cpp strength.cpp
 int main()
 {
-    //Window size
+    //Window creation
     int windowSizeX = 800;
     int windowSizeY = 600;
     int windowBorderSize = 16;
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Game Title here");
     
+    //View creation
+    sf::View view;
+    view.reset(sf::FloatRect(0,0, windowSizeX, windowSizeY));
+    view.setViewport(sf::FloatRect(0.0f, 0.0f, 1.0f, 1.0f));
+    window.setView(view);
+
     //gravity
     b2Vec2 gravity(0, 9.81f);
 
@@ -62,11 +69,14 @@ int main()
     if(!playerTexture.loadFromFile("Assets/basic ship.png"))
         return EXIT_FAILURE;
 
+    //load background
+    sf::Texture backgroundTexture;
+    if(!backgroundTexture.loadFromFile("Assets/background.jpeg"))
+        return EXIT_FAILURE;
+    sf::Sprite background(backgroundTexture);
+
     //Create the text
     sf::Text text("Testing here", font, 50);
-
-    //create the main window
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Game Title here");
 
     //Create the player
     Player player;
@@ -189,6 +199,9 @@ int main()
 
         //clear the screen
         window.clear(sf::Color(100, 149, 237));
+
+        //draw background
+        window.draw(background);
 
         //draw text
         window.draw(text);
