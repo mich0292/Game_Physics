@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <stdlib.h>
+#include <string>
 #include "Wall.h"
 #include "Obstacle.h"
 #include "Player.h"
@@ -44,9 +45,10 @@ int main()
     //Box2D Variables
     b2World world(gravity);
 
-    //vector to store a list obstacles
+    //vector
     std::vector<Obstacle> obstacles;
     std::vector<Strength> strength;
+    std::vector<sf::Texture> obstacleTextureV;
 
     //load the font
     sf::Font font;
@@ -55,8 +57,14 @@ int main()
 
     //load obstacle texture
     sf::Texture obstacleTexture;
-    if(!obstacleTexture.loadFromFile("Assets/barren.png"))
-        return EXIT_FAILURE; 
+    for(int i = 1; i < 12; i++)
+    {
+        std::string temp = std::to_string(i);
+        if(!obstacleTexture.loadFromFile("Assets/Obstacles/" + temp + ".png"))
+            return EXIT_FAILURE; 
+        obstacleTextureV.push_back(obstacleTexture);
+    }
+
 
     //load player texture
     sf::Texture playerTexture;
@@ -166,8 +174,9 @@ int main()
             Obstacle temp;
             float tempX = rand() % windowSizeX;
             float tempY = rand() % windowSizeY;
+            int random = rand() % 11;
             temp.settingUpObstacle(world, 15.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
-            temp.setTexture(&obstacleTexture);
+            temp.setTexture(&obstacleTextureV[random]);
             obstacles.push_back(temp);
             
             //reset the time
@@ -197,16 +206,11 @@ int main()
             background.setPosition(background.getPosition().x - 2, background.getPosition().y);
             background2.setPosition(background2.getPosition().x - 2, background2.getPosition().y);
 
-            //update background
             if (background.getPosition().x <= -backgroundWidth)
-            {                   
                 background.setPosition(background2.getPosition().x + backgroundWidth, background.getPosition().y);
-            }
 
             if (background2.getPosition().x <= -backgroundWidth)
-            {
                 background2.setPosition(background.getPosition().x + backgroundWidth, background.getPosition().y);
-            }
 
             //reset the time
             timeElapsedSinceLastFrame -= timeStep;
