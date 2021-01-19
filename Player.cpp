@@ -8,9 +8,9 @@ void Player::settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f pos
 {
     player = sf::RectangleShape(size);
     player.setOrigin(sf::Vector2f(size.x/2, size.y/2));
-    player.setFillColor(fillColor);
-    player.setOutlineColor(outlineColor);
-    player.setOutlineThickness(thickness);
+    //player.setFillColor(fillColor);
+    //player.setOutlineColor(outlineColor);
+    //player.setOutlineThickness(thickness);
 
     bodyDef.position = b2Vec2(position.x/PIXEL_PER_METER, position.y/PIXEL_PER_METER);
     bodyDef.type = b2_dynamicBody;
@@ -23,6 +23,11 @@ void Player::settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f pos
 
 	body = world.CreateBody(&bodyDef);
 	body->CreateFixture(&fixture);    
+}
+
+void Player::setTexture(sf::Texture* texture)
+{
+    player.setTexture(texture, true);
 }
 
 //angle in degree

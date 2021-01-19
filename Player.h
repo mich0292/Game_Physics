@@ -15,5 +15,6 @@ class Player
     void update();
     void updateAngle(float angle);
     void updateMovement(float force);
+    void setTexture(sf::Texture* texture);
     sf::Shape& getShape();
 };

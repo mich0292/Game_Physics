@@ -52,6 +52,16 @@ int main()
     if(!font.loadFromFile("Assets/Font.ttf"))
         return EXIT_FAILURE;
 
+    //load obstacle texture
+    sf::Texture obstacleTexture;
+    if(!obstacleTexture.loadFromFile("Assets/barren.png"))
+        return EXIT_FAILURE; 
+
+    //load player texture
+    sf::Texture playerTexture;
+    if(!playerTexture.loadFromFile("Assets/basic ship.png"))
+        return EXIT_FAILURE;
+
     //Create the text
     sf::Text text("Testing here", font, 50);
 
@@ -63,6 +73,7 @@ int main()
 
     //Setting up the player
     player.settingUpPlayer(world, sf::Vector2f(30.0f, 30.0f), sf::Vector2f(windowSizeX/2,windowSizeY/2), sf::Color(255, 182, 193), sf::Color::Black, -1);
+    player.setTexture(&playerTexture);
 
     //Create the wall
     Wall leftWall;
@@ -146,6 +157,7 @@ int main()
             float tempX = rand() % windowSizeX;
             float tempY = rand() % windowSizeY;
             temp.settingUpObstacle(world, 15.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
+            temp.setTexture(&obstacleTexture);
             obstacles.push_back(temp);
             
             //reset the time
