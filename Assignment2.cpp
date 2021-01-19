@@ -65,7 +65,6 @@ int main()
         obstacleTextureV.push_back(obstacleTexture);
     }
 
-
     //load player texture
     sf::Texture playerTexture;
     if(!playerTexture.loadFromFile("Assets/basic ship.png"))
@@ -174,7 +173,7 @@ int main()
             Obstacle temp;
             float tempX = rand() % windowSizeX;
             float tempY = rand() % windowSizeY;
-            int random = rand() % 11;
+            int random = rand() % obstacleTextureV.size();
             temp.settingUpObstacle(world, 15.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
             temp.setTexture(&obstacleTextureV[random]);
             obstacles.push_back(temp);
