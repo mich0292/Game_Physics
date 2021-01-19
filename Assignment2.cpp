@@ -84,7 +84,7 @@ int main()
     if(!playerTexture.loadFromFile("Assets/basic ship.png"))
         return EXIT_FAILURE;
 
-    //load background
+    //load background texture
     sf::Texture backgroundTexture;
     if(!backgroundTexture.loadFromFile("Assets/background.jpg"))
         return EXIT_FAILURE;
@@ -95,17 +95,15 @@ int main()
     background.setPosition(0, 0);
     background2.setPosition(4155, 0);
 
-    //Create the text
+    //Set up text
     sf::Text text("Score: ", font, 30);
     sf::Text scoreText;
     scoreText.setFont(font);
     scoreText.setCharacterSize(30);
     scoreText.setPosition(100, 0);
 
-    //Create the player
+    //Player
     Player player;
-
-    //Setting up the player
     player.settingUpPlayer(world, sf::Vector2f(30.0f, 30.0f), sf::Vector2f(windowSizeX/2,windowSizeY/2), sf::Color(255, 182, 193), sf::Color::Black, -1);
     player.setTexture(&playerTexture);
 
@@ -196,9 +194,9 @@ int main()
         timeElapsedSinceLastFrame += deltaTime;
         timeElapsedSinceLastSpawn += deltaTime;
 
+        //create new obstacle
         if(timeElapsedSinceLastSpawn >= timeToSpawn)
-        {
-            //create new obstacle
+        {            
             Obstacle temp;
             float tempX = rand() % windowSizeX;
             float tempY = rand() % windowSizeY;
