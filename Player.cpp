@@ -20,6 +20,7 @@ void Player::settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f pos
 
 	body = world.CreateBody(&bodyDef);
 	body->CreateFixture(&fixture);    
+    //body->SetFixedRotation(true);
 }
 
 void Player::setTexture(sf::Texture* texture)

@@ -18,8 +18,13 @@ int main()
     int windowBorderSize = 16;
     sf::RenderWindow window(sf::VideoMode(800, 600), "Game Title here");
 
+    //View
+    sf::View view;
+    view.reset(sf::FloatRect(0, 0, windowSizeX, windowSizeY));
+    view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+
     //gravity
-    b2Vec2 gravity(0, 9.81f);
+    b2Vec2 gravity(0, 0.0f);
 
     //World Simulation & Clock
     float timeStep = 1.0f/60.0f;
@@ -41,6 +46,12 @@ int main()
 
     //button press
     bool buttonPressed = false;
+
+    //score 
+    int score = 0;
+
+    //background
+    int backgroundWidth = 4155;
 
     //delta time
     float deltaTime = 0;
@@ -77,16 +88,19 @@ int main()
     sf::Texture backgroundTexture;
     if(!backgroundTexture.loadFromFile("Assets/background.jpg"))
         return EXIT_FAILURE;
-    sf::Sprite background(backgroundTexture);
-    sf::Sprite background2(backgroundTexture);
 
     //Set up background 
+    sf::Sprite background(backgroundTexture);
+    sf::Sprite background2(backgroundTexture);
     background.setPosition(0, 0);
     background2.setPosition(4155, 0);
-    int backgroundWidth = 4155;
 
     //Create the text
-    sf::Text text("Testing here", font, 50);
+    sf::Text text("Score: ", font, 30);
+    sf::Text scoreText;
+    scoreText.setFont(font);
+    scoreText.setCharacterSize(30);
+    scoreText.setPosition(100, 0);
 
     //Create the player
     Player player;
@@ -96,16 +110,16 @@ int main()
     player.setTexture(&playerTexture);
 
     //Create the wall
-    Wall leftWall;
-    Wall rightWall;
-    Wall topWall;
-    Wall bottomWall;
+    // Wall leftWall;
+    // Wall rightWall;
+    // Wall topWall;
+    // Wall bottomWall;
 
     //Setting up the wall
-    leftWall.settingUpWall(world, sf::Vector2f(windowBorderSize, windowSizeY-windowBorderSize*2), sf::Vector2f(windowBorderSize/2,windowSizeY/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
-    rightWall.settingUpWall(world, sf::Vector2f(windowBorderSize, windowSizeY-windowBorderSize*2), sf::Vector2f(windowSizeX-windowBorderSize/2,windowSizeY/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
-    topWall.settingUpWall(world, sf::Vector2f(windowSizeX, windowBorderSize), sf::Vector2f(windowSizeX/2,windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
-    bottomWall.settingUpWall(world, sf::Vector2f(windowSizeX, windowBorderSize), sf::Vector2f(windowSizeX/2,windowSizeY-windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
+    // leftWall.settingUpWall(world, sf::Vector2f(windowBorderSize, windowSizeY-windowBorderSize*2), sf::Vector2f(windowBorderSize/2,windowSizeY/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
+    // rightWall.settingUpWall(world, sf::Vector2f(windowBorderSize, windowSizeY-windowBorderSize*2), sf::Vector2f(windowSizeX-windowBorderSize/2,windowSizeY/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
+    // topWall.settingUpWall(world, sf::Vector2f(windowSizeX, windowBorderSize), sf::Vector2f(windowSizeX/2,windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
+    // bottomWall.settingUpWall(world, sf::Vector2f(windowSizeX, windowBorderSize), sf::Vector2f(windowSizeX/2,windowSizeY-windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
 
     //Creating and setting up strength
     for(int i = 0, posY = 400; i < 5; i++, posY -= 30)
@@ -197,17 +211,18 @@ int main()
             timeElapsedSinceLastSpawn -= timeToSpawn;
         }
 
-        //Update physics after reach the time step
+        //Update physics & UI after reach the time step
         if(timeElapsedSinceLastFrame >= timeStep)
         {
+            //update physics
             //this functions performs collision detection, integration and constraint solution
             world.Step(timeStep, velocityIterations, positionIterations);
             
-            //Update wall physics
-            leftWall.update();
-            rightWall.update();
-            topWall.update();
-            bottomWall.update();
+            // //Update wall physics
+            // leftWall.update();
+            // rightWall.update();
+            // topWall.update();
+            // bottomWall.update();
 
             //update obstacles physics
             for(int i = 0; i < obstacles.size(); i++)
@@ -226,9 +241,16 @@ int main()
             if (background2.getPosition().x <= -backgroundWidth)
                 background2.setPosition(background.getPosition().x + backgroundWidth, background.getPosition().y);
 
+            //update UI            
+            scoreText.setString(std::to_string(score));
+
             //reset the time
             timeElapsedSinceLastFrame -= timeStep;
         }
+
+        //set view
+        view.setCenter(player.getShape().getPosition());
+        window.setView(view);
 
         //clear the screen
         window.clear(sf::Color(100, 149, 237));
@@ -239,12 +261,13 @@ int main()
 
         //draw text
         window.draw(text);
+        window.draw(scoreText);
 
-        //draw wall
-        window.draw(leftWall.getShape());
-        window.draw(rightWall.getShape());
-        window.draw(topWall.getShape());
-        window.draw(bottomWall.getShape());
+        // //draw wall
+        // window.draw(leftWall.getShape());
+        // window.draw(rightWall.getShape());
+        // window.draw(topWall.getShape());
+        // window.draw(bottomWall.getShape());
 
         //draw obstacles
         for(int i = 0; i < obstacles.size(); i++)
