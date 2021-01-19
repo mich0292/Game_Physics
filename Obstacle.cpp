@@ -5,10 +5,7 @@ static const float PIXEL_PER_METER = 32.0f;
 void Obstacle::settingUpObstacle(b2World& world, float radius, sf::Vector2f position, sf::Color fillColor, sf::Color outlineColor, float thickness)
 {
     obstacle = sf::CircleShape(radius);
-    obstacle.setOrigin(sf::Vector2f(radius, radius));
-    //obstacle.setFillColor(fillColor);
-    //obstacle.setOutlineColor(outlineColor);
-    //obstacle.setOutlineThickness(thickness);      
+    obstacle.setOrigin(sf::Vector2f(radius, radius));  
 
     bodyDef.position = b2Vec2(position.x/PIXEL_PER_METER, position.y/PIXEL_PER_METER);
     bodyDef.type = b2_staticBody;
