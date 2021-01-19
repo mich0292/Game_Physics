@@ -17,7 +17,7 @@ int main()
     int windowBorderSize = 16;
     
     //gravity
-    b2Vec2 gravity(0, 0);
+    b2Vec2 gravity(0, 9.81f);
 
     //World Simulation & Clock
     float timeStep = 1.0f/60.0f;
@@ -131,7 +131,6 @@ int main()
                 temp = maxTimePressed - (temp - maxTimePressed);
 
             player.updateMovement(temp * forcePerStrength);
-
             totalTimePressed = 0;
             timeElapsedSinceLastIncrease = 0;
         }
@@ -140,18 +139,18 @@ int main()
         timeElapsedSinceLastFrame += deltaTime;
         timeElapsedSinceLastSpawn += deltaTime;
 
-        // if(timeElapsedSinceLastSpawn >= timeToSpawn)
-        // {
-        //     //create new obstacle
-        //     Obstacle temp;
-        //     float tempX = rand() % windowSizeX;
-        //     float tempY = rand() % windowSizeY;
-        //     temp.settingUpObstacle(world, 15.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
-        //     obstacles.push_back(temp);
+        if(timeElapsedSinceLastSpawn >= timeToSpawn)
+        {
+            //create new obstacle
+            Obstacle temp;
+            float tempX = rand() % windowSizeX;
+            float tempY = rand() % windowSizeY;
+            temp.settingUpObstacle(world, 15.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
+            obstacles.push_back(temp);
             
-        //     //reset the time
-        //     timeElapsedSinceLastSpawn -= timeToSpawn;
-        // }
+            //reset the time
+            timeElapsedSinceLastSpawn -= timeToSpawn;
+        }
 
         //Update physics after reach the time step
         if(timeElapsedSinceLastFrame >= timeStep)
