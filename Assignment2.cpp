@@ -39,6 +39,9 @@ int main()
     int maxTimePressed = 5;
     float forcePerStrength = 100.0f;
 
+    //button press
+    bool buttonPressed = false;
+
     //delta time
     float deltaTime = 0;
 
@@ -129,11 +132,23 @@ int main()
         //check keyboard event
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
         {
-            player.updateAngle(5.0f);
+            if(!buttonPressed)
+            {
+                player.updateAngle(20.0f);
+                buttonPressed = true;
+            }
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
         {
-            player.updateAngle(-5.0f);
+            if(!buttonPressed)
+            {
+                player.updateAngle(-20.0f);
+                buttonPressed = true;
+            }
+        }
+        else
+        {
+            buttonPressed = false;
         }
         
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
