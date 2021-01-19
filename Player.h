@@ -14,6 +14,6 @@ class Player
     void settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f position, sf::Color fillColor, sf::Color outlineColor, float thickness);
     void update();
     void updateAngle(float angle);
-    void updateMovement(b2Vec2 force);
+    void updateMovement(float force);
     sf::Shape& getShape();
 };

@@ -17,7 +17,7 @@ int main()
     int windowBorderSize = 16;
     
     //gravity
-    b2Vec2 gravity(0, 9.81f);
+    b2Vec2 gravity(0, 0);
 
     //World Simulation & Clock
     float timeStep = 1.0f/60.0f;
@@ -35,7 +35,7 @@ int main()
     float timeElapsedSinceLastIncrease = 0;
     int totalTimePressed = 0;
     int maxTimePressed = 5;
-    b2Vec2 forcePerStrength(10, 10);
+    float forcePerStrength = 100.0f;
 
     //delta time
     float deltaTime = 0;
@@ -125,33 +125,33 @@ int main()
         }
         else
         {
-            totalTimePressed = 0;
-            timeElapsedSinceLastIncrease = 0;
-
-            float temp = totalTimePressed;
+            int temp = totalTimePressed;
 
             if(totalTimePressed > maxTimePressed)
                 temp = maxTimePressed - (temp - maxTimePressed);
 
             player.updateMovement(temp * forcePerStrength);
+
+            totalTimePressed = 0;
+            timeElapsedSinceLastIncrease = 0;
         }
 
         //Clock things
         timeElapsedSinceLastFrame += deltaTime;
         timeElapsedSinceLastSpawn += deltaTime;
 
-        if(timeElapsedSinceLastSpawn >= timeToSpawn)
-        {
-            //create new obstacle
-            Obstacle temp;
-            float tempX = rand() % windowSizeX;
-            float tempY = rand() % windowSizeY;
-            temp.settingUpObstacle(world, 15.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
-            obstacles.push_back(temp);
+        // if(timeElapsedSinceLastSpawn >= timeToSpawn)
+        // {
+        //     //create new obstacle
+        //     Obstacle temp;
+        //     float tempX = rand() % windowSizeX;
+        //     float tempY = rand() % windowSizeY;
+        //     temp.settingUpObstacle(world, 15.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
+        //     obstacles.push_back(temp);
             
-            //reset the time
-            timeElapsedSinceLastSpawn -= timeToSpawn;
-        }
+        //     //reset the time
+        //     timeElapsedSinceLastSpawn -= timeToSpawn;
+        // }
 
         //Update physics after reach the time step
         if(timeElapsedSinceLastFrame >= timeStep)
@@ -196,7 +196,7 @@ int main()
         window.draw(player.getShape());
 
         //draw strength
-        float temp = totalTimePressed;
+        int temp = totalTimePressed;
 
         if(totalTimePressed > maxTimePressed)
             temp = maxTimePressed - (temp - maxTimePressed);

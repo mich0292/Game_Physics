@@ -1,4 +1,6 @@
 #include "Player.h"
+#include <stdio.h>    
+#include <math.h>
 
 static const float PIXEL_PER_METER = 32.0f;
 
@@ -16,6 +18,8 @@ void Player::settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f pos
     shape.SetAsBox((size.x/2)/PIXEL_PER_METER, (size.y/2)/PIXEL_PER_METER);
 
 	fixture.shape = &shape;
+    fixture.density = 0.3f;
+	fixture.friction = 0.5f;
 
 	body = world.CreateBody(&bodyDef);
 	body->CreateFixture(&fixture);    
@@ -30,9 +34,10 @@ void Player::updateAngle(float angle)
     body->SetTransform(body->GetPosition(), tempAngle);         
 }
 
-void Player::updateMovement(b2Vec2 force)
+void Player::updateMovement(float force)
 {
-    body->ApplyForceToCenter(force, true);
+    b2Vec2 forceDirection(cos(body->GetAngle()) * force, sin(body->GetAngle()) * force);
+    body->ApplyForceToCenter(forceDirection, true);
 }
 
 void Player::update()
