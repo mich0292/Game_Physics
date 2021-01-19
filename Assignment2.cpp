@@ -16,11 +16,6 @@ int main()
     int windowSizeY = 600;
     int windowBorderSize = 16;
     sf::RenderWindow window(sf::VideoMode(800, 600), "Game Title here");
-    
-    //View creation
-    sf::View view;
-    view.reset(sf::FloatRect(0,0, windowSizeX, windowSizeY));
-    view.setViewport(sf::FloatRect(0.0f, 0.0f, 1.0f, 1.0f));
 
     //gravity
     b2Vec2 gravity(0, 9.81f);
@@ -73,6 +68,12 @@ int main()
     if(!backgroundTexture.loadFromFile("Assets/background.jpg"))
         return EXIT_FAILURE;
     sf::Sprite background(backgroundTexture);
+    sf::Sprite background2(backgroundTexture);
+
+    //Set up background 
+    background.setPosition(0, 0);
+    background2.setPosition(4155, 0);
+    int backgroundWidth = 4155;
 
     //Create the text
     sf::Text text("Testing here", font, 50);
@@ -114,11 +115,6 @@ int main()
             if(event.type == sf::Event::Closed)
                 window.close();
         }
-
-        //moving background
-        view.move(100.0f, 100.0f);
-
-        //window.setView(view);
 
         // (restart can get time.delta time and as seconds return value in seconds)
         deltaTime = fixedUpdateClock.restart().asSeconds();
@@ -197,6 +193,21 @@ int main()
             //update player physics
             player.update();
 
+            //update background
+            background.setPosition(background.getPosition().x - 2, background.getPosition().y);
+            background2.setPosition(background2.getPosition().x - 2, background2.getPosition().y);
+
+            //update background
+            if (background.getPosition().x <= -backgroundWidth)
+            {                   
+                background.setPosition(background2.getPosition().x + backgroundWidth, background.getPosition().y);
+            }
+
+            if (background2.getPosition().x <= -backgroundWidth)
+            {
+                background2.setPosition(background.getPosition().x + backgroundWidth, background.getPosition().y);
+            }
+
             //reset the time
             timeElapsedSinceLastFrame -= timeStep;
         }
@@ -206,6 +217,7 @@ int main()
 
         //draw background
         window.draw(background);
+        window.draw(background2);
 
         //draw text
         window.draw(text);
