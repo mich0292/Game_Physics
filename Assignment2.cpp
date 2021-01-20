@@ -1,11 +1,9 @@
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
 #include <Box2D/Box2D.h>
 #include <iostream>
 #include <vector>
 #include <stdlib.h>
 #include <string>
-#include <fstream>
 #include "Wall.h"
 #include "Planet.h"
 #include "Player.h"
@@ -47,7 +45,7 @@ int main()
     float timeElapsedSinceLastIncrease = 0;
     int totalTimePressed = 0;
     int maxTimePressed = 5;
-    float forcePerStrength = 100.0f;
+    float forcePerStrength = 80.0f;
 
     //button press
     bool buttonPressed = false;
@@ -68,15 +66,6 @@ int main()
     std::vector<Planet> planets;
     std::vector<Strength> strength;
     std::vector<sf::Texture> planetTextureV;
-
-    //load bgm
-    sf::Music bgm;
-    if (!bgm.openFromFile("Assets/bgm.ogg"))
-        return EXIT_FAILURE;
-
-    // Play the music
-    bgm.setLoop(true);
-    bgm.play();
 
     //load the font
     sf::Font font;
@@ -136,9 +125,8 @@ int main()
     //Creating and setting up strength (the boxes)
     for(int i = 0, posY = 0; i < 5; i++, posY -= 20)
     {
-        Strength temp; 
-		// 150 -> view is 150.0f and the ship is 40.0f
-        temp.settingUpStrength(world, sf::Vector2f(15.0f, 15.0f), sf::Vector2f(windowSizeX/2 - 190.0f, windowSizeY/2 + posY), sf::Color(0, 255, 0), sf::Color::Black, -1);
+        Strength temp;
+        temp.settingUpStrength(world, sf::Vector2f(15.0f, 15.0f), sf::Vector2f(windowSizeX/2 - 40.0f, windowSizeY/2 + posY), sf::Color(0, 255, 0), sf::Color::Black, -1);
         strength.push_back(temp);
     }
 
@@ -161,7 +149,7 @@ int main()
         {
             if(!buttonPressed)
             {
-                player.updateAngle(-20.0f);
+                player.updateAngle(20.0f);
                 buttonPressed = true;
             }
         }
@@ -169,7 +157,7 @@ int main()
         {
             if(!buttonPressed)
             {
-                player.updateAngle(20.0f);
+                player.updateAngle(-20.0f);
                 buttonPressed = true;
             }
         }
@@ -213,15 +201,8 @@ int main()
         if(timeElapsedSinceLastSpawn >= timeToSpawn)
         {            
             Planet temp;
-            int minX = player.getShape().getPosition().x - view.getSize().x/2;
-            int maxX = player.getShape().getPosition().x + view.getSize().x/2;
-            int minY = player.getShape().getPosition().y - view.getSize().y/2;
-            int maxY = player.getShape().getPosition().y + view.getSize().y/2;
-            //float tempX = rand() % windowSizeX;
-            //float tempY = rand() % windowSizeY;
-            int tempX = rand() % (maxX - minX) + minX;
-            int tempY = rand() % (maxY - minY) + minY;
-			srand(time(0));
+            float tempX = rand() % windowSizeX;
+            float tempY = rand() % windowSizeY;
             int random = rand() % planetTextureV.size();
             temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
             temp.setTexture(&planetTextureV[random]);
@@ -246,7 +227,11 @@ int main()
 
             //update planets physics
             for(int i = 0; i < planets.size(); i++)
-                planets[i].update();
+			{
+				planets[i].update();
+				planets[i].exertGravity(player.getBody());
+			}
+                
 
             //update player physics
             player.update();
@@ -262,7 +247,6 @@ int main()
             //     background2.setPosition(background.getPosition().x + backgroundWidth, background.getPosition().y);
 
             //update UI            
-            score = player.getShape().getPosition().x - player.getOriPosition().x;
             scoreText.setString(std::to_string(score));
 
             //reset the time
@@ -270,7 +254,7 @@ int main()
         }
 
         //set view
-        view.setCenter(player.getShape().getPosition()+ sf::Vector2f (150.0f, 0.0f));
+        view.setCenter(player.getShape().getPosition());
         window.setView(view);
 
         //clear the screen
@@ -314,33 +298,4 @@ int main()
     }
 
     return 0;
-}
-
-void readScore()
-{
-    std::string score;
-    std::ifstream scoreFile("score.txt");
-
-    if (scoreFile.is_open())
-    {
-        while ( getline (scoreFile,score) )
-        {
-            std::cout << score << '\n';
-        }
-        scoreFile.close();
-    }
-    else std::cout << "Unable to open file"; 
-}
-
-void saveScore()
-{
-    std::ofstream scoreFile("score.txt");
-    if (scoreFile.is_open())
-    {
-        scoreFile << "This is a line.\n";
-        scoreFile << "This is another line.\n";
-        scoreFile.close();
-    }
-    else 
-        std::cout << "Unable to open file";
 }

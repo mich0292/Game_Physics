@@ -4,27 +4,10 @@
 
 static const float PIXEL_PER_METER = 32.0f;
 
-void Player::setTexture(sf::Texture* texture)
-{
-    player.setTexture(texture, true);
-}
-
-sf::Shape& Player::getShape()
-{
-	return player;
-}
-
-sf::Vector2f Player::getOriPosition()
-{
-    return oriPosition;
-}
-
 void Player::settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f position, sf::Color fillColor, sf::Color outlineColor, float thickness)
 {
     player = sf::RectangleShape(size);
     player.setOrigin(sf::Vector2f(size.x/2, size.y/2));
-
-    oriPosition = position;
 
     bodyDef.position = b2Vec2(position.x/PIXEL_PER_METER, position.y/PIXEL_PER_METER);
     bodyDef.type = b2_dynamicBody;
@@ -39,6 +22,7 @@ void Player::settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f pos
 	body->CreateFixture(&fixture);
 	body->SetLinearDamping(0.5f);
 	body->SetAngularDamping(0.5f);
+    //body->SetFixedRotation(true);
 }
 
 //angle in degree
@@ -62,3 +46,24 @@ void Player::update()
     player.setRotation(body->GetAngle() * 180/b2_pi);
     player.setPosition(body->GetPosition().x*PIXEL_PER_METER, body->GetPosition().y*PIXEL_PER_METER);
 }
+
+void Player::setTexture(sf::Texture* texture)
+{
+    player.setTexture(texture, true);
+}
+
+sf::Shape& Player::getShape()
+{
+	return player;
+}
+
+b2FixtureDef& Player::getFixture()
+{
+	return fixture;
+}
+
+b2Body *Player::getBody() {
+  return body;
+}
+
+
