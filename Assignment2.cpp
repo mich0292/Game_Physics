@@ -74,7 +74,7 @@ int main()
     if (!bgm.openFromFile("Assets/bgm.ogg"))
         return EXIT_FAILURE;
 
-    // Play the music    
+    // Play the music
     bgm.setLoop(true);
     bgm.play();
 
@@ -212,8 +212,14 @@ int main()
         if(timeElapsedSinceLastSpawn >= timeToSpawn)
         {            
             Planet temp;
-            float tempX = rand() % windowSizeX;
-            float tempY = rand() % windowSizeY;
+            int minX = player.getShape().getPosition().x - view.getSize().x/2;
+            int maxX = player.getShape().getPosition().x + view.getSize().x/2;
+            int minY = player.getShape().getPosition().y - view.getSize().y/2;
+            int maxY = player.getShape().getPosition().y + view.getSize().y/2;
+            //float tempX = rand() % windowSizeX;
+            //float tempY = rand() % windowSizeY;
+            int tempX = rand() % (maxX - minX) + minX;
+            int tempY = rand() % (maxY - minY) + minY;
 			srand(time(0));
             int random = rand() % planetTextureV.size();
             temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
@@ -307,4 +313,33 @@ int main()
     }
 
     return 0;
+}
+
+void readScore()
+{
+    std::string score;
+    std::ifstream scoreFile("score.txt");
+
+    if (scoreFile.is_open())
+    {
+        while ( getline (scoreFile,score) )
+        {
+            std::cout << score << '\n';
+        }
+        scoreFile.close();
+    }
+    else std::cout << "Unable to open file"; 
+}
+
+void saveScore()
+{
+    std::ofstream scoreFile("score.txt");
+    if (scoreFile.is_open())
+    {
+        scoreFile << "This is a line.\n";
+        scoreFile << "This is another line.\n";
+        scoreFile.close();
+    }
+    else 
+        std::cout << "Unable to open file";
 }
