@@ -160,7 +160,7 @@ int main()
         {
             if(!buttonPressed)
             {
-                player.updateAngle(20.0f);
+                player.updateAngle(-20.0f);
                 buttonPressed = true;
             }
         }
@@ -168,7 +168,7 @@ int main()
         {
             if(!buttonPressed)
             {
-                player.updateAngle(-20.0f);
+                player.updateAngle(20.0f);
                 buttonPressed = true;
             }
         }
