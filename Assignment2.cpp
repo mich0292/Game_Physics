@@ -246,7 +246,11 @@ int main()
 
             //update planets physics
             for(int i = 0; i < planets.size(); i++)
-                planets[i].update();
+			{
+				 planets[i].update();
+				planets[i].exertGravity(player.getBody());
+			}
+               
 
             //update player physics
             player.update();
