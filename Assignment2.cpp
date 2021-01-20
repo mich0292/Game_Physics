@@ -22,6 +22,9 @@ int main()
     sf::View view;
     view.reset(sf::FloatRect(0, 0, windowSizeX, windowSizeY));
     view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+    sf::View HUDView;
+    HUDView.reset(sf::FloatRect(0, 0, windowSizeX, windowSizeY));
+    HUDView.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 
     //gravity
     b2Vec2 gravity(0, 0.0f);
@@ -229,15 +232,15 @@ int main()
             //update player physics
             player.update();
 
-            //update background
-            background.setPosition(background.getPosition().x - 2, background.getPosition().y);
-            background2.setPosition(background2.getPosition().x - 2, background2.getPosition().y);
+            // //update background
+            // background.setPosition(background.getPosition().x - 2, background.getPosition().y);
+            // background2.setPosition(background2.getPosition().x - 2, background2.getPosition().y);
 
-            if (background.getPosition().x <= -backgroundWidth)
-                background.setPosition(background2.getPosition().x + backgroundWidth, background.getPosition().y);
+            // if (background.getPosition().x <= -backgroundWidth)
+            //     background.setPosition(background2.getPosition().x + backgroundWidth, background.getPosition().y);
 
-            if (background2.getPosition().x <= -backgroundWidth)
-                background2.setPosition(background.getPosition().x + backgroundWidth, background.getPosition().y);
+            // if (background2.getPosition().x <= -backgroundWidth)
+            //     background2.setPosition(background.getPosition().x + backgroundWidth, background.getPosition().y);
 
             //update UI            
             scoreText.setString(std::to_string(score));
@@ -257,9 +260,12 @@ int main()
         window.draw(background);
         window.draw(background2);
 
-        //draw text
-        window.draw(text);
-        window.draw(scoreText);
+        //draw player
+        window.draw(player.getShape());
+
+        //draw obstacles
+        for(int i = 0; i < obstacles.size(); i++)
+            window.draw(obstacles[i].getShape());
 
         // //draw wall
         // window.draw(leftWall.getShape());
@@ -267,12 +273,12 @@ int main()
         // window.draw(topWall.getShape());
         // window.draw(bottomWall.getShape());
 
-        //draw obstacles
-        for(int i = 0; i < obstacles.size(); i++)
-            window.draw(obstacles[i].getShape());
-
-        //draw player
-        window.draw(player.getShape());
+        //set HUDView
+        window.setView(HUDView);
+        
+        //draw text
+        window.draw(text);
+        window.draw(scoreText);
 
         //draw strength
         int temp = totalTimePressed;
