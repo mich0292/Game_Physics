@@ -12,7 +12,6 @@ class Planet
 
     public:
     void settingUpPlanet(b2World& world, float radius, sf::Vector2f position, sf::Color fillColor, sf::Color outlineColor, float thickness);
-	void exertGravity(b2Body*);
     void update();
     void setTexture(sf::Texture* texture);
     sf::Shape& getShape();

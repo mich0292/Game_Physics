@@ -1,6 +1,4 @@
 #include "Planet.h"
-#include <cmath>
-#include <iostream>
 
 static const float PIXEL_PER_METER = 32.0f;
 
@@ -31,29 +29,6 @@ void Planet::update()
 	// Box2D uses radians for rotation, SFML uses degree
     planet.setRotation(body->GetAngle() * 180/b2_pi);
     planet.setPosition(body->GetPosition().x*PIXEL_PER_METER, body->GetPosition().y*PIXEL_PER_METER);
-}
-
-void Planet::exertGravity(b2Body* playerBody)
-{
-	//https://mentalgrain.com/box2d/simulating-multiple-sources-of-gravity-in-box2d/
-	//https://www.emanueleferonato.com/2012/03/28/simulate-radial-gravity-also-know-as-planet-gravity-with-box2d-as-seen-on-angry-birds-space/
-	
-	//Find the distance between the player and the planet
-	b2Vec2 planetDistance = body->GetWorldCenter() - playerBody->GetWorldCenter();
-	float distanceBetween = planetDistance.Length();
-	
-	//Ensure that the distance is within 3 x planet's radius to calculate the gravitational pull
-	if (distanceBetween < planet.getRadius() * 1) //This isn't working, need to fix
-	{
-		//Get the sum of distance vector components
-		float vecSum = std::abs(planetDistance.x) + std::abs(planetDistance.y);
-		
-		planetDistance.x += ((1/vecSum)*planet.getRadius()/distanceBetween);
-		planetDistance.y += ((1/vecSum)*planet.getRadius()/distanceBetween);
-		playerBody->ApplyForce(planetDistance, playerBody->GetWorldCenter(), true);
-		//std::cout << planetDistance.x << " " << planetDistance.y;
-	}
-	
 }
 
 sf::Shape& Planet::getShape()
