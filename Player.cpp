@@ -39,7 +39,6 @@ void Player::settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f pos
 	body->CreateFixture(&fixture);
 	body->SetLinearDamping(0.5f);
 	body->SetAngularDamping(0.5f);
-    //body->SetFixedRotation(true);
 }
 
 //angle in degree
