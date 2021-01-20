@@ -5,11 +5,11 @@
 #include <stdlib.h>
 #include <string>
 #include "Wall.h"
-#include "Obstacle.h"
+#include "Planet.h"
 #include "Player.h"
 #include "Strength.h"
 
-//compile assignment2.cpp player.cpp wall.cpp obstacle.cpp strength.cpp
+//compile assignment2.cpp player.cpp wall.cpp planet.cpp strength.cpp
 int main()
 {
     //Window creation
@@ -36,7 +36,7 @@ int main()
     int32 positionIterations = 8;
     sf::Clock fixedUpdateClock;
     
-    //Spawn obstacle clock
+    //Spawn planet clock
     float timeToSpawn = 1.0f;
     float timeElapsedSinceLastSpawn = 0;
 
@@ -63,23 +63,23 @@ int main()
     b2World world(gravity);
 
     //vector
-    std::vector<Obstacle> obstacles;
+    std::vector<Planet> planets;
     std::vector<Strength> strength;
-    std::vector<sf::Texture> obstacleTextureV;
+    std::vector<sf::Texture> planetTextureV;
 
     //load the font
     sf::Font font;
     if(!font.loadFromFile("Assets/Font.ttf"))
         return EXIT_FAILURE;
 
-    //load obstacle texture
-    sf::Texture obstacleTexture;
-    for(int i = 1; i < 12; i++)
+    //load planet texture
+    sf::Texture planetTexture;
+    for(int i = 1; i < 9; i++)
     {
         std::string temp = std::to_string(i);
-        if(!obstacleTexture.loadFromFile("Assets/Obstacles/" + temp + ".png"))
+        if(!planetTexture.loadFromFile("Assets/Planets/" + temp + ".png"))
             return EXIT_FAILURE; 
-        obstacleTextureV.push_back(obstacleTexture);
+        planetTextureV.push_back(planetTexture);
     }
 
     //load player texture
@@ -107,7 +107,7 @@ int main()
 
     //Player
     Player player;
-    player.settingUpPlayer(world, sf::Vector2f(40.0f, 40.0f), sf::Vector2f(windowSizeX/2,windowSizeY/2), sf::Color(255, 182, 193), sf::Color::Black, -1);
+    player.settingUpPlayer(world, sf::Vector2f(32.0f, 32.0f), sf::Vector2f(windowSizeX/2,windowSizeY/2), sf::Color(255, 182, 193), sf::Color::Black, -1);
     player.setTexture(&playerTexture);
 	
     //Create the wall
@@ -197,16 +197,17 @@ int main()
         timeElapsedSinceLastFrame += deltaTime;
         timeElapsedSinceLastSpawn += deltaTime;
 
-        //create new obstacle
+        //create new planet
         if(timeElapsedSinceLastSpawn >= timeToSpawn)
         {            
-            Obstacle temp;
+            Planet temp;
             float tempX = rand() % windowSizeX;
             float tempY = rand() % windowSizeY;
-            int random = rand() % obstacleTextureV.size();
-            temp.settingUpObstacle(world, 25.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
-            temp.setTexture(&obstacleTextureV[random]);
-            obstacles.push_back(temp);
+			srand(time(0));
+            int random = rand() % planetTextureV.size();
+            temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
+            temp.setTexture(&planetTextureV[random]);
+            planets.push_back(temp);
             
             //reset the time
             timeElapsedSinceLastSpawn -= timeToSpawn;
@@ -225,9 +226,9 @@ int main()
             // topWall.update();
             // bottomWall.update();
 
-            //update obstacles physics
-            for(int i = 0; i < obstacles.size(); i++)
-                obstacles[i].update();
+            //update planets physics
+            for(int i = 0; i < planets.size(); i++)
+                planets[i].update();
 
             //update player physics
             player.update();
@@ -263,9 +264,9 @@ int main()
         //draw player
         window.draw(player.getShape());
 
-        //draw obstacles
-        for(int i = 0; i < obstacles.size(); i++)
-            window.draw(obstacles[i].getShape());
+        //draw planets
+        for(int i = 0; i < planets.size(); i++)
+            window.draw(planets[i].getShape());
 
         // //draw wall
         // window.draw(leftWall.getShape());
