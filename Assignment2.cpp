@@ -4,6 +4,7 @@
 #include <vector>
 #include <stdlib.h>
 #include <string>
+#include <fstream>
 #include "Wall.h"
 #include "Planet.h"
 #include "Player.h"
@@ -244,6 +245,7 @@ int main()
             //     background2.setPosition(background.getPosition().x + backgroundWidth, background.getPosition().y);
 
             //update UI            
+            score = player.getShape().getPosition().x - player.getOriPosition().x;
             scoreText.setString(std::to_string(score));
 
             //reset the time

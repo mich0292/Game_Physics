@@ -5,6 +5,7 @@ class Player
 {
     private:
     sf::RectangleShape player;
+    sf::Vector2f oriPosition;
     b2Body* body;
     b2BodyDef bodyDef;
     b2PolygonShape shape;
@@ -17,4 +18,5 @@ class Player
     void update();
     void updateAngle(float angle);
     void updateMovement(float force);
+    sf::Vector2f getOriPosition();
 };
