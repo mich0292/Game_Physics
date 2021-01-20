@@ -4,6 +4,16 @@
 
 static const float PIXEL_PER_METER = 32.0f;
 
+void Player::setTexture(sf::Texture* texture)
+{
+    player.setTexture(texture, true);
+}
+
+sf::Shape& Player::getShape()
+{
+	return player;
+}
+
 void Player::settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f position, sf::Color fillColor, sf::Color outlineColor, float thickness)
 {
     player = sf::RectangleShape(size);
@@ -19,13 +29,9 @@ void Player::settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f pos
 	fixture.friction = 0.5f;
 
 	body = world.CreateBody(&bodyDef);
-	body->CreateFixture(&fixture);    
+	body->CreateFixture(&fixture);
+	body->SetLinearDamping(0.5f);
     //body->SetFixedRotation(true);
-}
-
-void Player::setTexture(sf::Texture* texture)
-{
-    player.setTexture(texture, true);
 }
 
 //angle in degree
@@ -48,9 +54,4 @@ void Player::update()
 	// Box2D uses radians for rotation, SFML uses degree
     player.setRotation(body->GetAngle() * 180/b2_pi);
     player.setPosition(body->GetPosition().x*PIXEL_PER_METER, body->GetPosition().y*PIXEL_PER_METER);
-}
-
-sf::Shape& Player::getShape()
-{
-	return player;
 }

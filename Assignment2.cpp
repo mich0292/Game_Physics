@@ -41,7 +41,7 @@ int main()
     float timeElapsedSinceLastSpawn = 0;
 
     //Strength clock & variables
-    float timeToIncreaseStrength = 1.0f;
+    float timeToIncreaseStrength = 0.3f;
     float timeElapsedSinceLastIncrease = 0;
     int totalTimePressed = 0;
     int maxTimePressed = 5;
@@ -107,9 +107,9 @@ int main()
 
     //Player
     Player player;
-    player.settingUpPlayer(world, sf::Vector2f(30.0f, 30.0f), sf::Vector2f(windowSizeX/2,windowSizeY/2), sf::Color(255, 182, 193), sf::Color::Black, -1);
+    player.settingUpPlayer(world, sf::Vector2f(40.0f, 40.0f), sf::Vector2f(windowSizeX/2,windowSizeY/2), sf::Color(255, 182, 193), sf::Color::Black, -1);
     player.setTexture(&playerTexture);
-
+	
     //Create the wall
     // Wall leftWall;
     // Wall rightWall;
@@ -122,11 +122,11 @@ int main()
     // topWall.settingUpWall(world, sf::Vector2f(windowSizeX, windowBorderSize), sf::Vector2f(windowSizeX/2,windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
     // bottomWall.settingUpWall(world, sf::Vector2f(windowSizeX, windowBorderSize), sf::Vector2f(windowSizeX/2,windowSizeY-windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
 
-    //Creating and setting up strength
-    for(int i = 0, posY = 400; i < 5; i++, posY -= 30)
+    //Creating and setting up strength (the boxes)
+    for(int i = 0, posY = 0; i < 5; i++, posY -= 20)
     {
         Strength temp;
-        temp.settingUpStrength(world, sf::Vector2f(15.0f, 15.0f), sf::Vector2f(50.0f, posY), sf::Color(0, 255, 0), sf::Color::Black, -1);
+        temp.settingUpStrength(world, sf::Vector2f(15.0f, 15.0f), sf::Vector2f(windowSizeX/2 - 40.0f, windowSizeY/2 + posY), sf::Color(0, 255, 0), sf::Color::Black, -1);
         strength.push_back(temp);
     }
 
@@ -170,7 +170,7 @@ int main()
         {
             //clock things
             timeElapsedSinceLastIncrease += deltaTime;
-
+			
             if(timeElapsedSinceLastIncrease >= timeToIncreaseStrength)
             {
                 totalTimePressed++;
@@ -204,7 +204,7 @@ int main()
             float tempX = rand() % windowSizeX;
             float tempY = rand() % windowSizeY;
             int random = rand() % obstacleTextureV.size();
-            temp.settingUpObstacle(world, 15.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
+            temp.settingUpObstacle(world, 25.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
             temp.setTexture(&obstacleTextureV[random]);
             obstacles.push_back(temp);
             
@@ -231,7 +231,7 @@ int main()
 
             //update player physics
             player.update();
-
+			
             // //update background
             // background.setPosition(background.getPosition().x - 2, background.getPosition().y);
             // background2.setPosition(background2.getPosition().x - 2, background2.getPosition().y);

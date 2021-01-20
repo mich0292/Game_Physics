@@ -11,10 +11,10 @@ class Player
     b2FixtureDef fixture;
 
     public:
+	void setTexture(sf::Texture* texture);
+    sf::Shape& getShape();
     void settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f position, sf::Color fillColor, sf::Color outlineColor, float thickness);
     void update();
     void updateAngle(float angle);
     void updateMovement(float force);
-    void setTexture(sf::Texture* texture);
-    sf::Shape& getShape();
 };
