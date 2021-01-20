@@ -136,8 +136,9 @@ int main()
     //Creating and setting up strength (the boxes)
     for(int i = 0, posY = 0; i < 5; i++, posY -= 20)
     {
-        Strength temp;
-        temp.settingUpStrength(world, sf::Vector2f(15.0f, 15.0f), sf::Vector2f(windowSizeX/2 - 40.0f, windowSizeY/2 + posY), sf::Color(0, 255, 0), sf::Color::Black, -1);
+        Strength temp; 
+		// 150 -> view is 150.0f and the ship is 40.0f
+        temp.settingUpStrength(world, sf::Vector2f(15.0f, 15.0f), sf::Vector2f(windowSizeX/2 - 190.0f, windowSizeY/2 + posY), sf::Color(0, 255, 0), sf::Color::Black, -1);
         strength.push_back(temp);
     }
 
@@ -269,7 +270,7 @@ int main()
         }
 
         //set view
-        view.setCenter(player.getShape().getPosition());
+        view.setCenter(player.getShape().getPosition()+ sf::Vector2f (150.0f, 0.0f));
         window.setView(view);
 
         //clear the screen
