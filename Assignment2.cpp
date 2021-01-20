@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <Box2D/Box2D.h>
 #include <iostream>
 #include <vector>
@@ -67,6 +68,15 @@ int main()
     std::vector<Planet> planets;
     std::vector<Strength> strength;
     std::vector<sf::Texture> planetTextureV;
+
+    //load bgm
+    sf::Music bgm;
+    if (!bgm.openFromFile("Assets/bgm.ogg"))
+        return EXIT_FAILURE;
+
+    // Play the music    
+    bgm.setLoop(true);
+    bgm.play();
 
     //load the font
     sf::Font font;
