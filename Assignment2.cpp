@@ -215,20 +215,20 @@ int main()
         //create new planet
         if(timeElapsedSinceLastSpawn >= timeToSpawn)
         {            
-            // Planet temp;
-            // int minX = player.getShape().getPosition().x - view.getSize().x/2;
-            // int maxX = player.getShape().getPosition().x + view.getSize().x/2;
-            // int minY = player.getShape().getPosition().y - view.getSize().y/2;
-            // int maxY = player.getShape().getPosition().y + view.getSize().y/2;
+            Planet temp;
+            int minX = player.getShape().getPosition().x - view.getSize().x/2;
+            int maxX = player.getShape().getPosition().x + view.getSize().x/2;
+            int minY = player.getShape().getPosition().y - view.getSize().y/2;
+            int maxY = player.getShape().getPosition().y + view.getSize().y/2;
             // //float tempX = rand() % windowSizeX;
             // //float tempY = rand() % windowSizeY;
-            // int tempX = rand() % (maxX - minX) + minX;
-            // int tempY = rand() % (maxY - minY) + minY;
-			// srand(time(0));
-            // int random = rand() % planetTextureV.size();
-            // temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
-            // temp.setTexture(&planetTextureV[random]);
-            // planets.push_back(temp);
+            int tempX = rand() % (maxX - minX) + minX;
+            int tempY = rand() % (maxY - minY) + minY;
+			srand(time(0));
+            int random = rand() % planetTextureV.size();
+            temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
+            temp.setTexture(&planetTextureV[random]);
+            planets.push_back(temp);
             
             //reset the time
             timeElapsedSinceLastSpawn -= timeToSpawn;
