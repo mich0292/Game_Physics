@@ -16,6 +16,5 @@ class Planet
 	void exertGravity(b2Body*);
     void update();
     void setTexture(sf::Texture* texture);
-	b2Body* getBody();
     sf::Shape& getShape();
 };

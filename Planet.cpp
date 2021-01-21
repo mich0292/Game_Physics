@@ -58,10 +58,6 @@ void Planet::exertGravity(b2Body* playerBody)
 	
 }
 
-b2Body* Planet::getBody() {
-	return body;
-}
-
 sf::Shape& Planet::getShape()
 {
 	return planet;

@@ -12,9 +12,6 @@
 #include "Strength.h"
 #include "MyContactListener.cpp"
 
-void saveScore(int);
-void readScore();
-
 //compile Assignment2.cpp Planet.cpp Strength.cpp Player.cpp Wall.cpp MyContactListener.cpp
 int main()
 {
@@ -403,34 +400,6 @@ int main()
 
         //Update the window
         window.display();
-		
-		if (!isPlaying && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) 
-		{
-			isPlaying = true;
-			saveScore(score);
-			score = 0;
-            timeElapsedSinceLastFrame = 0;
-            timeElapsedSinceLastIncrease = 0;
-            timeElapsedSinceLastSpawn = 0;
-            totalTimePressed = 0;
-            playerCurrentBackground = 1;
-
-            background.setPosition(0, 0);
-            background2.setPosition(4155, 0);
-
-            for(int i = 0; i < planets.size(); i++)
-                world.DestroyBody(planets[i].getBody());
-
-            world.DestroyBody(player.getBody());
-			planets.clear();
-
-            player.settingUpPlayer(world, sf::Vector2f(32.0f, 32.0f), sf::Vector2f(windowSizeX/2,backgroundHeight/2), sf::Color(255, 182, 193), sf::Color::Black, -1);
-            player.setTexture(&playerTexture);
-
-			view.reset(sf::FloatRect(0, 0, windowSizeX, windowSizeY));
-			HUDView.reset(sf::FloatRect(0, 0, windowSizeX, windowSizeY));
-			bgm.play();			
-		}
     }
 
     return 0;
@@ -452,12 +421,13 @@ void readScore()
     else std::cout << "Unable to open file"; 
 }
 
-void saveScore(int score)
+void saveScore()
 {
     std::ofstream scoreFile("score.txt");
     if (scoreFile.is_open())
     {
-		scoreFile << score << '\n';
+        scoreFile << "This is a line.\n";
+        scoreFile << "This is another line.\n";
         scoreFile.close();
     }
     else 
