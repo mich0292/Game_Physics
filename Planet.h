@@ -9,6 +9,7 @@ class Planet
     b2BodyDef bodyDef;
     b2CircleShape shape;
     b2FixtureDef fixture;
+	float gravitationalForce;
 
     public:
     void settingUpPlanet(b2World& world, float radius, sf::Vector2f position, sf::Color fillColor, sf::Color outlineColor, float thickness);

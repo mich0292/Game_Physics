@@ -16,7 +16,8 @@ void Planet::settingUpPlanet(b2World& world, float radius, sf::Vector2f position
 	fixture.shape = &shape;
     fixture.density = 0.3f;
 	fixture.friction = 0.5f;
-
+	gravitationalForce = 0.02f;
+	
 	body = world.CreateBody(&bodyDef);
 	body->CreateFixture(&fixture);    
 }
@@ -41,15 +42,16 @@ void Planet::exertGravity(b2Body* playerBody)
 	//Find the distance between the player and the planet
 	b2Vec2 planetDistance = body->GetWorldCenter() - playerBody->GetWorldCenter();
 	float distanceBetween = planetDistance.Length();
-	
+		
 	//Ensure that the distance is within 3 x planet's radius to calculate the gravitational pull
-	if (distanceBetween < planet.getRadius() * 1) //This isn't working, need to fix
+	if (distanceBetween < 5.0f) //This isn't working, need to fix
 	{
 		//Get the sum of distance vector components
-		float vecSum = std::abs(planetDistance.x) + std::abs(planetDistance.y);
+		//float vecSum = std::abs(planetDistance.x) + std::abs(planetDistance.y);
 		
-		planetDistance.x += ((1/vecSum)*planet.getRadius()/distanceBetween);
-		planetDistance.y += ((1/vecSum)*planet.getRadius()/distanceBetween);
+		//planetDistance.x += ((1/vecSum)*planet.getRadius()/distanceBetween);
+		//planetDistance.y += ((1/vecSum)*planet.getRadius()/distanceBetween);
+		planetDistance *= gravitationalForce;
 		playerBody->ApplyForce(planetDistance, playerBody->GetWorldCenter(), true);
 		//std::cout << planetDistance.x << " " << planetDistance.y;
 	}
