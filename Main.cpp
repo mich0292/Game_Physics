@@ -6,6 +6,7 @@ Contacts #1 : 012-6820674 foofangjee@gmail.com
 ID and Name #2 : 1171101517 Michelle Chai Mei Wei  
 Contacts #2 : 016-5727809 michelle123679@gmail.com  
 ********************************************/  
+//Compile using this line: compile Main.cpp Planet.cpp Strength.cpp Player.cpp Wall.cpp MyContactListener.cpp
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
