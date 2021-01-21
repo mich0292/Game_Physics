@@ -11,6 +11,11 @@ void Strength::settingUpStrength(b2World& world, sf::Vector2f size, sf::Vector2f
     strength.setSize(size);
 }
 
+void Strength::setPosition(sf::Vector2f position)
+{
+    strength.setPosition(position);
+}
+
 sf::Shape& Strength::getShape()
 {
 	return strength;

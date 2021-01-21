@@ -49,9 +49,9 @@ int main()
     //Strength clock & variables
     float timeToIncreaseStrength = 0.3f;
     float timeElapsedSinceLastIncrease = 0;
+    float forcePerStrength = 100.0f;
     int totalTimePressed = 0;
     int maxTimePressed = 5;
-    float forcePerStrength = 100.0f;
 
     //button press
     bool buttonPressed = false;
@@ -244,31 +244,31 @@ int main()
         //create new planet
         if(timeElapsedSinceLastSpawn >= timeToSpawn)
         {            
-            Planet temp;
-			//150 view, 24 planet radius, 20 wall
-            int minX = player.getShape().getPosition().x - view.getSize().x/2 + 194.0f;
-			int maxX = player.getShape().getPosition().x + view.getSize().x/2 + 150.0f;
-			int minY = player.getShape().getPosition().y - view.getSize().y/2;
-			int maxY = player.getShape().getPosition().y + view.getSize().y/2;
-            // //float tempX = rand() % windowSizeX;
-            // //float tempY = rand() % windowSizeY;
-            int tempX = rand() % (maxX - minX) + minX;
-            int tempY = rand() % (maxY - minY) + minY;
-			/*
-			for(int i = 0; i < planets.size(); i++)
-			{
-				//Ensure the generated posX and posY of the new planet doesn't overlap 
-				//Can get stuck
-				while (tempX <= planets[i].getShape().getPosition().x + 48.0f && tempX >= planets[i].getShape().getPosition().x - 48.0f)
-					tempX = rand() % (maxX - minX) + minX;	
-				while (tempY <= planets[i].getShape().getPosition().y + 48.0f && tempX >= planets[i].getShape().getPosition().y - 48.0f)
-					tempY = rand() % (maxY - minY) + minY;
-			}*/
-			srand(time(0));
-            int random = rand() % planetTextureV.size();
-            temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
-            temp.setTexture(&planetTextureV[random]);
-            planets.push_back(temp);
+            // Planet temp;
+			// //150 view, 24 planet radius, 20 wall
+            // int minX = player.getShape().getPosition().x - view.getSize().x/2 + 194.0f;
+			// int maxX = player.getShape().getPosition().x + view.getSize().x/2 + 150.0f;
+			// int minY = player.getShape().getPosition().y - view.getSize().y/2;
+			// int maxY = player.getShape().getPosition().y + view.getSize().y/2;
+            // // //float tempX = rand() % windowSizeX;
+            // // //float tempY = rand() % windowSizeY;
+            // int tempX = rand() % (maxX - minX) + minX;
+            // int tempY = rand() % (maxY - minY) + minY;
+			// /*
+			// for(int i = 0; i < planets.size(); i++)
+			// {
+			// 	//Ensure the generated posX and posY of the new planet doesn't overlap 
+			// 	//Can get stuck
+			// 	while (tempX <= planets[i].getShape().getPosition().x + 48.0f && tempX >= planets[i].getShape().getPosition().x - 48.0f)
+			// 		tempX = rand() % (maxX - minX) + minX;	
+			// 	while (tempY <= planets[i].getShape().getPosition().y + 48.0f && tempX >= planets[i].getShape().getPosition().y - 48.0f)
+			// 		tempY = rand() % (maxY - minY) + minY;
+			// }*/
+			// srand(time(0));
+            // int random = rand() % planetTextureV.size();
+            // temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
+            // temp.setTexture(&planetTextureV[random]);
+            // planets.push_back(temp);
             
             //reset the time
             timeElapsedSinceLastSpawn -= timeToSpawn;
@@ -331,6 +331,16 @@ int main()
             scoreText.setString(std::to_string(score));
 			healthText.setString(std::to_string(player.getHealth()));
             
+            //update strength UI
+            for(int i = 0, posY = 0; i < 5; i++, posY -= 20)
+            {
+                sf::Vector2i pixelPosition = window.mapCoordsToPixel(sf::Vector2f(player.getShape().getPosition().x - 40.0f, player.getShape().getPosition().y + 10 + posY), view);
+                sf::Vector2f newPosition = window.mapPixelToCoords(pixelPosition, HUDView);
+                //sf::Vector2i pixelPosition = render.mapCoordsToPixel(sf::Vector2f(player.getShape().getPosition().x - 40.0f, player.getShape().getPosition().y - 40 + posY));
+                // sf::Vector2f newPosition = sf::RenderTarget::mapPixelToCoords(&pixelPosition, &HUDView);
+                strength[i].setPosition(newPosition);
+            }
+
 			//Lose condition
 			if (player.getHealth() <= 0)
 			{
@@ -353,9 +363,9 @@ int main()
         if(player.getShape().getPosition().x + 150.0f > view.getCenter().x && player.getShape().getPosition().y > windowSizeY/2 && player.getShape().getPosition().y < backgroundHeight - windowSizeY/2)
             view.setCenter(player.getShape().getPosition()+ sf::Vector2f (150.0f, 0.0f));
         else if(player.getShape().getPosition().y > windowSizeY/2 && player.getShape().getPosition().y > windowSizeY/2 && player.getShape().getPosition().y < backgroundHeight - windowSizeY/2)
-            view.setCenter(sf::Vector2f(view.getCenter().x, player.getShape().getPosition().y));
+            view.setCenter(sf::Vector2f(view.getCenter().x, player.getShape().getPosition().y));     
         else if(player.getShape().getPosition().x + 150.0f > view.getCenter().x)
-            view.setCenter(sf::Vector2f(player.getShape().getPosition().x + 150.0f, view.getCenter().y));
+            view.setCenter(sf::Vector2f(player.getShape().getPosition().x + 150.0f, view.getCenter().y));           
         window.setView(view);
 
         //clear the screen

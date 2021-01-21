@@ -23,7 +23,7 @@ class Player
 	void endContact();
 	void setTexture(sf::Texture* texture);
     sf::Shape& getShape();
-	b2Body *getBody();
+	b2Body* getBody();
 	sf::Vector2f getOriPosition();
 	int getHealth();
 };
