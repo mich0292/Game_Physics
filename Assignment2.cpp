@@ -241,31 +241,31 @@ int main()
         //create new planet
         if(timeElapsedSinceLastSpawn >= timeToSpawn)
         {            
-            // Planet temp;
-			// //150 view, 24 planet radius, 20 wall
-            // int minX = player.getShape().getPosition().x - view.getSize().x/2 + 194.0f;
-			// int maxX = player.getShape().getPosition().x + view.getSize().x/2 + 150.0f;
-			// int minY = player.getShape().getPosition().y - view.getSize().y/2;
-			// int maxY = player.getShape().getPosition().y + view.getSize().y/2;
-            // // //float tempX = rand() % windowSizeX;
-            // // //float tempY = rand() % windowSizeY;
-            // int tempX = rand() % (maxX - minX) + minX;
-            // int tempY = rand() % (maxY - minY) + minY;
-			// /*
-			// for(int i = 0; i < planets.size(); i++)
-			// {
-			// 	//Ensure the generated posX and posY of the new planet doesn't overlap 
-			// 	//Can get stuck
-			// 	while (tempX <= planets[i].getShape().getPosition().x + 48.0f && tempX >= planets[i].getShape().getPosition().x - 48.0f)
-			// 		tempX = rand() % (maxX - minX) + minX;	
-			// 	while (tempY <= planets[i].getShape().getPosition().y + 48.0f && tempX >= planets[i].getShape().getPosition().y - 48.0f)
-			// 		tempY = rand() % (maxY - minY) + minY;
-			// }*/
-			// srand(time(0));
-            // int random = rand() % planetTextureV.size();
-            // temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
-            // temp.setTexture(&planetTextureV[random]);
-            // planets.push_back(temp);
+            Planet temp;
+			//150 view, 24 planet radius, 20 wall
+            int minX = player.getShape().getPosition().x - view.getSize().x/2 + 194.0f;
+			int maxX = player.getShape().getPosition().x + view.getSize().x/2 + 150.0f;
+			int minY = player.getShape().getPosition().y - view.getSize().y/2;
+			int maxY = player.getShape().getPosition().y + view.getSize().y/2;
+            // //float tempX = rand() % windowSizeX;
+            // //float tempY = rand() % windowSizeY;
+            int tempX = rand() % (maxX - minX) + minX;
+            int tempY = rand() % (maxY - minY) + minY;
+			/*
+			for(int i = 0; i < planets.size(); i++)
+			{
+				//Ensure the generated posX and posY of the new planet doesn't overlap 
+				//Can get stuck
+				while (tempX <= planets[i].getShape().getPosition().x + 48.0f && tempX >= planets[i].getShape().getPosition().x - 48.0f)
+					tempX = rand() % (maxX - minX) + minX;	
+				while (tempY <= planets[i].getShape().getPosition().y + 48.0f && tempX >= planets[i].getShape().getPosition().y - 48.0f)
+					tempY = rand() % (maxY - minY) + minY;
+			}*/
+			srand(time(0));
+            int random = rand() % planetTextureV.size();
+            temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
+            temp.setTexture(&planetTextureV[random]);
+            planets.push_back(temp);
             
             //reset the time
             timeElapsedSinceLastSpawn -= timeToSpawn;
