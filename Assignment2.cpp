@@ -14,6 +14,8 @@
 
 void saveScore(int);
 void readScore();
+bool checkSpawnLocationX(float, float, std::vector<Planet>);
+bool checkSpawnLocationY(float, float, std::vector<Planet>);
 
 //compile Assignment2.cpp Planet.cpp Strength.cpp Player.cpp Wall.cpp MyContactListener.cpp
 int main()
@@ -478,4 +480,36 @@ void saveScore(int score)
     }
     else 
         std::cout << "Unable to open file";
+}
+
+bool checkSpawnLocationX(float posX, float playerPosX, std::vector<Planet> planets)
+{
+	//Remember the coordinates (0,0 is top left)
+	if (posX >= playerPosX + 32.0f || posX <= playerPosX - 32.0f)
+	{
+		for (int i = 0; i < planets.size(); i++)
+		{
+			//48.0 is the planet size
+			if (posX <= planets[i].getShape().getPosition().x + 80.0f 
+			|| posX >= planets[i].getShape().getPosition().x - 80.0f)
+				return true;
+		}
+	}
+	std:: cout << "PosX check failed";
+	return false;
+}
+
+bool checkSpawnLocationY(float posY, float playerPosY, std::vector<Planet> planets)
+{
+	if (posY >= playerPosY + 32.0f || posY <= playerPosY - 32.0f)
+	{
+		for (int i = 0; i < planets.size(); i++)
+		{
+			if (posY <= planets[i].getShape().getPosition().y + 80.0f 
+			|| posY >= planets[i].getShape().getPosition().y - 80.0f)
+				return true;
+		}
+	}
+	std:: cout << "PosY check failed";
+	return false;	
 }
