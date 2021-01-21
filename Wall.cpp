@@ -23,6 +23,11 @@ void Wall::settingUpWall(b2World& world, sf::Vector2f size, sf::Vector2f positio
 	body->CreateFixture(&fixture);    
 }
 
+void Wall::setPosition(sf::Vector2f position)
+{
+    body->SetTransform(b2Vec2(position.x/PIXEL_PER_METER, position.y/PIXEL_PER_METER), body->GetAngle());
+}
+
 void Wall::update()
 {
 	// Box2D uses radians for rotation, SFML uses degree

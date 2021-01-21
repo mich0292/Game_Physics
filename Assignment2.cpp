@@ -57,6 +57,7 @@ int main()
 
     //background
     int backgroundWidth = 4155;
+    int backgroundHeight = 2770;
 
     //delta time
     float deltaTime = 0;
@@ -118,21 +119,23 @@ int main()
 
     //Player
     Player player;
-    player.settingUpPlayer(world, sf::Vector2f(32.0f, 32.0f), sf::Vector2f(windowSizeX/2,windowSizeY/2), sf::Color(255, 182, 193), sf::Color::Black, -1);
+    player.settingUpPlayer(world, sf::Vector2f(32.0f, 32.0f), sf::Vector2f(windowSizeX/2,backgroundHeight/2), sf::Color(255, 182, 193), sf::Color::Black, -1);
     player.setTexture(&playerTexture);
+    int playerCurrentBackground = 1;
 	
     //Create the wall
-    // Wall leftWall;
+    Wall leftWall;
     // Wall rightWall;
-    // Wall topWall;
-    // Wall bottomWall;
+    Wall topWall;
+    Wall bottomWall;
 
     //Setting up the wall
-    // leftWall.settingUpWall(world, sf::Vector2f(windowBorderSize, windowSizeY-windowBorderSize*2), sf::Vector2f(windowBorderSize/2,windowSizeY/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
-    // rightWall.settingUpWall(world, sf::Vector2f(windowBorderSize, windowSizeY-windowBorderSize*2), sf::Vector2f(windowSizeX-windowBorderSize/2,windowSizeY/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
-    // topWall.settingUpWall(world, sf::Vector2f(windowSizeX, windowBorderSize), sf::Vector2f(windowSizeX/2,windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
-    // bottomWall.settingUpWall(world, sf::Vector2f(windowSizeX, windowBorderSize), sf::Vector2f(windowSizeX/2,windowSizeY-windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
-
+    leftWall.settingUpWall(world, sf::Vector2f(windowBorderSize, windowSizeY), sf::Vector2f(view.getCenter().x - windowSizeX/2, view.getCenter().y), sf::Color(100, 100, 100), sf::Color::Black, -1);
+    //rightWall.settingUpWall(world, sf::Vector2f(windowBorderSize, windowSizeY-windowBorderSize*2), sf::Vector2f(windowSizeX-windowBorderSize/2,windowSizeY/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
+    //topWall.settingUpWall(world, sf::Vector2f(backgroundWidth - windowBorderSize, windowBorderSize), sf::Vector2f((background.getPosition().x + backgroundWidth)/2, background.getPosition().y + windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
+    //bottomWall.settingUpWall(world, sf::Vector2f(backgroundWidth - windowBorderSize, windowBorderSize), sf::Vector2f((background.getPosition().x + backgroundWidth)/2, background.getPosition().y + backgroundHeight - windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
+    topWall.settingUpWall(world, sf::Vector2f(windowSizeX, windowBorderSize), sf::Vector2f(view.getCenter().x, background.getPosition().y + windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
+    bottomWall.settingUpWall(world, sf::Vector2f(windowSizeX, windowBorderSize), sf::Vector2f(view.getCenter().x, background.getPosition().y + backgroundHeight - windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
     //Creating and setting up strength (the boxes)
     for(int i = 0, posY = 0; i < 5; i++, posY -= 20)
     {
@@ -212,20 +215,20 @@ int main()
         //create new planet
         if(timeElapsedSinceLastSpawn >= timeToSpawn)
         {            
-            Planet temp;
-            int minX = player.getShape().getPosition().x - view.getSize().x/2;
-            int maxX = player.getShape().getPosition().x + view.getSize().x/2;
-            int minY = player.getShape().getPosition().y - view.getSize().y/2;
-            int maxY = player.getShape().getPosition().y + view.getSize().y/2;
-            //float tempX = rand() % windowSizeX;
-            //float tempY = rand() % windowSizeY;
-            int tempX = rand() % (maxX - minX) + minX;
-            int tempY = rand() % (maxY - minY) + minY;
-			srand(time(0));
-            int random = rand() % planetTextureV.size();
-            temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
-            temp.setTexture(&planetTextureV[random]);
-            planets.push_back(temp);
+            // Planet temp;
+            // int minX = player.getShape().getPosition().x - view.getSize().x/2;
+            // int maxX = player.getShape().getPosition().x + view.getSize().x/2;
+            // int minY = player.getShape().getPosition().y - view.getSize().y/2;
+            // int maxY = player.getShape().getPosition().y + view.getSize().y/2;
+            // //float tempX = rand() % windowSizeX;
+            // //float tempY = rand() % windowSizeY;
+            // int tempX = rand() % (maxX - minX) + minX;
+            // int tempY = rand() % (maxY - minY) + minY;
+			// srand(time(0));
+            // int random = rand() % planetTextureV.size();
+            // temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
+            // temp.setTexture(&planetTextureV[random]);
+            // planets.push_back(temp);
             
             //reset the time
             timeElapsedSinceLastSpawn -= timeToSpawn;
@@ -238,32 +241,46 @@ int main()
             //this functions performs collision detection, integration and constraint solution
             world.Step(timeStep, velocityIterations, positionIterations);
             
-            // //Update wall physics
+            //Update wall physics
             // leftWall.update();
             // rightWall.update();
-            // topWall.update();
-            // bottomWall.update();
+            topWall.update();
+            bottomWall.update();
 
             //update planets physics
             for(int i = 0; i < planets.size(); i++)
 			{
 				 planets[i].update();
 				planets[i].exertGravity(player.getBody());
-			}
-               
+			}               
 
             //update player physics
             player.update();
 			
-            // //update background
-            // background.setPosition(background.getPosition().x - 2, background.getPosition().y);
-            // background2.setPosition(background2.getPosition().x - 2, background2.getPosition().y);
+            //update background
+            if(background.getGlobalBounds().contains(player.getShape().getPosition()))
+                playerCurrentBackground = 1;
+            else
+                playerCurrentBackground = 2;
 
-            // if (background.getPosition().x <= -backgroundWidth)
-            //     background.setPosition(background2.getPosition().x + backgroundWidth, background.getPosition().y);
+            int rightContraint;
 
-            // if (background2.getPosition().x <= -backgroundWidth)
-            //     background2.setPosition(background.getPosition().x + backgroundWidth, background.getPosition().y);
+            if(playerCurrentBackground == 1)
+            {
+                rightContraint = background.getPosition().x + (backgroundWidth * 3/4);
+                
+                //move the background if the player reach the certain point
+                if(player.getShape().getPosition().x >= rightContraint)
+                    background2.setPosition(background.getPosition().x + backgroundWidth, background.getPosition().y);
+            }
+            else
+            {
+                rightContraint = background2.getPosition().x + (backgroundWidth * 3/4);
+
+                //move the background if the player reach the certain point
+                if(player.getShape().getPosition().x >= rightContraint)
+                    background.setPosition(background2.getPosition().x + backgroundWidth, background2.getPosition().y);
+            }
 
             //update UI            
             score = player.getShape().getPosition().x - player.getOriPosition().x;
@@ -275,6 +292,12 @@ int main()
 
         //set view
         view.setCenter(player.getShape().getPosition()+ sf::Vector2f (150.0f, 0.0f));
+        topWall.setPosition(sf::Vector2f(view.getCenter().x, background.getPosition().y + windowBorderSize/2));
+        bottomWall.setPosition(sf::Vector2f(view.getCenter().x, background.getPosition().y + backgroundHeight - windowBorderSize/2));
+        leftWall.setPosition(sf::Vector2f(view.getCenter().x - windowSizeX/2, view.getCenter().y));
+        std::cout << "position x: " << view.getCenter().x - windowSizeX/2 << std::endl;
+        std::cout << "position y: " << view.getCenter().y << std::endl;
+        std::cout << "player position y: " << player.getShape().getPosition().y << std::endl;
         window.setView(view);
 
         //clear the screen
@@ -291,11 +314,11 @@ int main()
         for(int i = 0; i < planets.size(); i++)
             window.draw(planets[i].getShape());
 
-        // //draw wall
-        // window.draw(leftWall.getShape());
+        //draw wall
+        window.draw(leftWall.getShape());
         // window.draw(rightWall.getShape());
-        // window.draw(topWall.getShape());
-        // window.draw(bottomWall.getShape());
+        window.draw(topWall.getShape());
+        window.draw(bottomWall.getShape());
 
         //set HUDView
         window.setView(HUDView);
