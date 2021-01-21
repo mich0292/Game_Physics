@@ -19,7 +19,6 @@ class Player
     b2FixtureDef fixture;
 	sf::Vector2f oriPosition;
 	int health;
-	float coolDown;
 
     public:
 

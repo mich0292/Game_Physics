@@ -36,13 +36,6 @@ void Planet::setTexture(sf::Texture* texture)
     planet.setTexture(texture, true);
 }
 
-void Planet::update()
-{
-	// Box2D uses radians for rotation, SFML uses degree
-    planet.setRotation(body->GetAngle() * 180/b2_pi);
-    planet.setPosition(body->GetPosition().x*PIXEL_PER_METER, body->GetPosition().y*PIXEL_PER_METER);
-}
-
 void Planet::exertGravity(b2Body* playerBody)
 {
 	//https://mentalgrain.com/box2d/simulating-multiple-sources-of-gravity-in-box2d/
@@ -59,6 +52,13 @@ void Planet::exertGravity(b2Body* playerBody)
 		playerBody->ApplyForce(planetDistance, playerBody->GetWorldCenter(), true);
 	}
 	
+}
+
+void Planet::update()
+{
+	// Box2D uses radians for rotation, SFML uses degree
+    planet.setRotation(body->GetAngle() * 180/b2_pi);
+    planet.setPosition(body->GetPosition().x*PIXEL_PER_METER, body->GetPosition().y*PIXEL_PER_METER);
 }
 
 b2Body* Planet::getBody() 
