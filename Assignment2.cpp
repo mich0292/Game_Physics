@@ -17,6 +17,7 @@ bool checkSpawnLocationX(float, float, std::vector<Planet>);
 bool checkSpawnLocationY(float, float, std::vector<Planet>);
 void readScore(std::vector<int>& scoreVector);
 bool sortFunction(int num1, int num2);
+bool checkSpawn(Player player, sf::Vector2f randomPosition, std::vector<Planet>);
 
 //compile Assignment2.cpp Planet.cpp Strength.cpp Player.cpp Wall.cpp MyContactListener.cpp
 int main()
@@ -272,6 +273,12 @@ int main()
             // //float tempY = rand() % windowSizeY;
             int tempX = rand() % (maxX - minX) + minX;
             int tempY = rand() % (maxY - minY) + minY;
+
+            while(!checkSpawn(player, sf::Vector2f(tempX, tempY), planets))
+            {
+                tempX = rand() % (maxX - minX) + minX;
+                tempY = rand() % (maxY - minY) + minY;
+            }
 			/*
 			for(int i = 0; i < planets.size(); i++)
 			{
@@ -567,6 +574,11 @@ bool checkSpawnLocationX(float posX, float playerPosX, std::vector<Planet> plane
 	return false;
 }
 
+bool sortFunction(int num1, int num2)
+{
+    return (num2 < num1);
+}
+
 bool checkSpawnLocationY(float posY, float playerPosY, std::vector<Planet> planets)
 {
 	if (posY >= playerPosY + 32.0f || posY <= playerPosY - 32.0f)
@@ -580,4 +592,21 @@ bool checkSpawnLocationY(float posY, float playerPosY, std::vector<Planet> plane
 	}
 	std:: cout << "PosY check failed";
 	return false;	
+}
+
+bool checkSpawn(Player player, sf::Vector2f randomPosition, std::vector<Planet> planets)
+{
+    sf::FloatRect temp(randomPosition.x-48, randomPosition.y-48, 96, 96);
+
+    if(player.getShape().getGlobalBounds().intersects(temp))
+        return false;
+    else
+    {
+        for(int i = 0; i < planets.size(); i++)
+        {
+            if(planets[i].getShape().getGlobalBounds().intersects(temp))
+                return false;
+        }
+    }
+    return true;
 }
