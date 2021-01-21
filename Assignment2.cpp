@@ -12,6 +12,9 @@
 #include "Strength.h"
 #include "MyContactListener.cpp"
 
+void saveScore(int);
+void readScore();
+
 //compile Assignment2.cpp Planet.cpp Strength.cpp Player.cpp Wall.cpp MyContactListener.cpp
 int main()
 {
