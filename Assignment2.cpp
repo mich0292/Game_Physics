@@ -400,6 +400,34 @@ int main()
 
         //Update the window
         window.display();
+		
+		if (!isPlaying && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) 
+		{
+			isPlaying = true;
+			saveScore(score);
+			score = 0;
+            timeElapsedSinceLastFrame = 0;
+            timeElapsedSinceLastIncrease = 0;
+            timeElapsedSinceLastSpawn = 0;
+            totalTimePressed = 0;
+            playerCurrentBackground = 1;
+
+            background.setPosition(0, 0);
+            background2.setPosition(4155, 0);
+
+            for(int i = 0; i < planets.size(); i++)
+                world.DestroyBody(planets[i].getBody());
+
+            world.DestroyBody(player.getBody());
+			planets.clear();
+
+            player.settingUpPlayer(world, sf::Vector2f(32.0f, 32.0f), sf::Vector2f(windowSizeX/2,backgroundHeight/2), sf::Color(255, 182, 193), sf::Color::Black, -1);
+            player.setTexture(&playerTexture);
+
+			view.reset(sf::FloatRect(0, 0, windowSizeX, windowSizeY));
+			HUDView.reset(sf::FloatRect(0, 0, windowSizeX, windowSizeY));
+			bgm.play();	
+		}
     }
 
     return 0;
@@ -421,14 +449,17 @@ void readScore()
     else std::cout << "Unable to open file"; 
 }
 
-void saveScore()
+void saveScore(int score)
 {
-    std::ofstream scoreFile("score.txt");
-    if (scoreFile.is_open())
+	std::fstream fs;
+	fs.open ("score.txt",std::fstream::in | std::fstream::out | std::fstream::app);
+	std::string line;
+    if (fs.is_open())
     {
-        scoreFile << "This is a line.\n";
-        scoreFile << "This is another line.\n";
-        scoreFile.close();
+		while (getline(fs,line))
+			if (!line.empty())
+				fs << score << std::endl;
+        fs.close();
     }
     else 
         std::cout << "Unable to open file";
