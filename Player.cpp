@@ -24,7 +24,7 @@ void Player::settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f pos
 	body = world.CreateBody(&bodyDef);
 	body->CreateFixture(&fixture);
 	body->SetLinearDamping(0.5f);
-	body->SetAngularDamping(0.5f);
+	body->SetAngularDamping(1.0f);
 	body->SetUserData(this);
     //body->SetFixedRotation(true);
 }
