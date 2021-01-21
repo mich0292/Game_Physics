@@ -1,3 +1,11 @@
+/********************************************  
+Course : TGD2251 Game Physics  
+Session: Trimester 2, 2020/21  
+ID and Name #1 : 1171100973 Foo Fang Jee
+Contacts #1 : 012-6820674 foofangjee@gmail.com  
+ID and Name #2 : 1171101517 Michelle Chai Mei Wei  
+Contacts #2 : 016-5727809 michelle123679@gmail.com  
+********************************************/ 
 #include "Player.h"
 #include <stdio.h>    
 #include <math.h>
@@ -40,7 +48,7 @@ void Player::updateAngle(float angle)
 
 void Player::updateMovement(float force)
 {
-    b2Vec2 forceDirection(cos(body->GetAngle()) * force, sin(body->GetAngle()) * force);
+    b2Vec2 forceDirection(cos(body->GetAngle())*force, sin(body->GetAngle())*force);
     body->ApplyForceToCenter(forceDirection, true);
 }
 
@@ -71,8 +79,8 @@ sf::Shape& Player::getShape()
 	return player;
 }
 
-
-b2Body *Player::getBody() {
+b2Body *Player::getBody() 
+{
 	return body;
 }
 
@@ -85,5 +93,3 @@ int Player::getHealth()
 {
 	return health;
 }
-
-

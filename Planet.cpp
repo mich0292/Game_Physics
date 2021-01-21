@@ -1,3 +1,11 @@
+/********************************************  
+Course : TGD2251 Game Physics  
+Session: Trimester 2, 2020/21  
+ID and Name #1 : 1171100973 Foo Fang Jee
+Contacts #1 : 012-6820674 foofangjee@gmail.com  
+ID and Name #2 : 1171101517 Michelle Chai Mei Wei  
+Contacts #2 : 016-5727809 michelle123679@gmail.com  
+********************************************/ 
 #include "Planet.h"
 #include <cmath>
 #include <iostream>
@@ -44,22 +52,17 @@ void Planet::exertGravity(b2Body* playerBody)
 	b2Vec2 planetDistance = body->GetWorldCenter() - playerBody->GetWorldCenter();
 	float distanceBetween = planetDistance.Length();
 		
-	//Ensure that the distance is within 3 x planet's radius to calculate the gravitational pull
-	if (distanceBetween < 5.0f) //This isn't working, need to fix
+	//Ensure that when the player is within this distance then it is pulled
+	if (distanceBetween < 5.0f)
 	{
-		//Get the sum of distance vector components
-		//float vecSum = std::abs(planetDistance.x) + std::abs(planetDistance.y);
-		
-		//planetDistance.x += ((1/vecSum)*planet.getRadius()/distanceBetween);
-		//planetDistance.y += ((1/vecSum)*planet.getRadius()/distanceBetween);
 		planetDistance *= gravitationalForce;
 		playerBody->ApplyForce(planetDistance, playerBody->GetWorldCenter(), true);
-		//std::cout << planetDistance.x << " " << planetDistance.y;
 	}
 	
 }
 
-b2Body* Planet::getBody() {
+b2Body* Planet::getBody() 
+{
 	return body;
 }
 

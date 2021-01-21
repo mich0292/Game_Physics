@@ -1,3 +1,12 @@
+/********************************************  
+Course : TGD2251 Game Physics  
+Session: Trimester 2, 2020/21  
+ID and Name #1 : 1171100973 Foo Fang Jee
+Contacts #1 : 012-6820674 foofangjee@gmail.com  
+ID and Name #2 : 1171101517 Michelle Chai Mei Wei  
+Contacts #2 : 016-5727809 michelle123679@gmail.com  
+********************************************/  
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <Box2D/Box2D.h>
@@ -19,14 +28,13 @@ void readScore(std::vector<int>& scoreVector);
 bool sortFunction(int num1, int num2);
 bool checkSpawn(Player player, sf::Vector2f randomPosition, std::vector<Planet>);
 
-//compile Assignment2.cpp Planet.cpp Strength.cpp Player.cpp Wall.cpp MyContactListener.cpp
 int main()
 {
     //Window creation
     int windowSizeX = 800;
     int windowSizeY = 600;
     int windowBorderSize = 16;
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Game Title here");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Space Journey");
 
     //View
     sf::View view;
@@ -57,23 +65,23 @@ int main()
     int totalTimePressed = 0;
     int maxTimePressed = 5;
 
-    //button press
+    //Button press
     bool buttonPressed = false;
 
-    //score 
+    //Score 
     int score = 0;
 
-    //background
+    //Background
     int backgroundWidth = 4155;
     int backgroundHeight = 2770;
 
-    //delta time
+    //Delta time
     float deltaTime = 0;
 
     //Box2D Variables
     b2World world(gravity);
 
-    //vector
+    //Vector
     std::vector<Planet> planets;
     std::vector<Strength> strength;
     std::vector<sf::Texture> planetTextureV;
@@ -90,16 +98,16 @@ int main()
     if (!bgm.openFromFile("Assets/bgm.ogg"))
         return EXIT_FAILURE;
 
-    // Play the music
+    //Play the music
     bgm.setLoop(true);
     bgm.play();
 
-    //load the font
+    //Load the font
     sf::Font font;
     if(!font.loadFromFile("Assets/Font.ttf"))
         return EXIT_FAILURE;
 
-    //load planet texture
+    //Load planet texture
     sf::Texture planetTexture;
     for(int i = 1; i < 9; i++)
     {
@@ -109,12 +117,12 @@ int main()
         planetTextureV.push_back(planetTexture);
     }
 
-    //load player texture
+    //Load player texture
     sf::Texture playerTexture;
     if(!playerTexture.loadFromFile("Assets/basic ship.png"))
         return EXIT_FAILURE;
 
-    //load background texture
+    //Load background texture
     sf::Texture backgroundTexture;
     if(!backgroundTexture.loadFromFile("Assets/background.jpg"))
         return EXIT_FAILURE;
@@ -169,15 +177,11 @@ int main()
 	
     //Create the wall
     Wall leftWall;
-    // Wall rightWall;
     Wall topWall;
     Wall bottomWall;
 
     //Setting up the wall
     leftWall.settingUpWall(world, sf::Vector2f(windowBorderSize, windowSizeY), sf::Vector2f(view.getCenter().x - windowSizeX/2 + windowBorderSize/2, view.getCenter().y), sf::Color(100, 100, 100), sf::Color::Black, -1);
-    //rightWall.settingUpWall(world, sf::Vector2f(windowBorderSize, windowSizeY-windowBorderSize*2), sf::Vector2f(windowSizeX-windowBorderSize/2,windowSizeY/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
-    //topWall.settingUpWall(world, sf::Vector2f(backgroundWidth - windowBorderSize, windowBorderSize), sf::Vector2f((background.getPosition().x + backgroundWidth)/2, background.getPosition().y + windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
-    //bottomWall.settingUpWall(world, sf::Vector2f(backgroundWidth - windowBorderSize, windowBorderSize), sf::Vector2f((background.getPosition().x + backgroundWidth)/2, background.getPosition().y + backgroundHeight - windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
     topWall.settingUpWall(world, sf::Vector2f(windowSizeX, windowBorderSize), sf::Vector2f(view.getCenter().x, background.getPosition().y + windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
     bottomWall.settingUpWall(world, sf::Vector2f(windowSizeX, windowBorderSize), sf::Vector2f(view.getCenter().x, background.getPosition().y + backgroundHeight - windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
 	
@@ -190,7 +194,9 @@ int main()
         strength.push_back(temp);
     }
 
-    //Game loop
+    /******************************************************************************    
+	*************   			  Game Loop      					  *************    
+	******************************************************************************/ 
     while(window.isOpen())
     {
         sf::Event event;
@@ -201,10 +207,10 @@ int main()
                 window.close();
         }
 
-        // (restart can get time.delta time and as seconds return value in seconds)
+        //Restart can get time.delta time and as seconds return value in seconds
         deltaTime = fixedUpdateClock.restart().asSeconds();
         
-        //check keyboard event
+        //Check keyboard event
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
         {
             if(!buttonPressed)
@@ -260,7 +266,7 @@ int main()
 			timeElapsedSinceLastSpawn += deltaTime;
 		}
 
-        //create new planet
+        //Create new planet
         if(timeElapsedSinceLastSpawn >= timeToSpawn)
         {            
             Planet temp;
@@ -269,8 +275,7 @@ int main()
 			int maxX = player.getShape().getPosition().x + view.getSize().x/2 + 150.0f;
 			int minY = player.getShape().getPosition().y - view.getSize().y/2;
 			int maxY = player.getShape().getPosition().y + view.getSize().y/2;
-            // //float tempX = rand() % windowSizeX;
-            // //float tempY = rand() % windowSizeY;
+
             int tempX = rand() % (maxX - minX) + minX;
             int tempY = rand() % (maxY - minY) + minY;
 
@@ -279,31 +284,24 @@ int main()
                 tempX = rand() % (maxX - minX) + minX;
                 tempY = rand() % (maxY - minY) + minY;
             }
-			/*
-			for(int i = 0; i < planets.size(); i++)
-			{
-				//Ensure the generated posX and posY of the new planet doesn't overlap 
-				//Can get stuck
-				while (tempX <= planets[i].getShape().getPosition().x + 48.0f && tempX >= planets[i].getShape().getPosition().x - 48.0f)
-					tempX = rand() % (maxX - minX) + minX;	
-				while (tempY <= planets[i].getShape().getPosition().y + 48.0f && tempX >= planets[i].getShape().getPosition().y - 48.0f)
-					tempY = rand() % (maxY - minY) + minY;
-			}*/
+
 			srand(time(0));
             int random = rand() % planetTextureV.size();
             temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
             temp.setTexture(&planetTextureV[random]);
             planets.push_back(temp);
             
-            //reset the time
+            //Reset the time
             timeElapsedSinceLastSpawn -= timeToSpawn;
         }
-
-        //Update physics & UI after reach the time step
+		
+		/******************************************************************************    
+		*************   		  Physics Update     					 *************    
+		******************************************************************************/        
         if(timeElapsedSinceLastFrame >= timeStep)
         {
-            //update physics
-            //this functions performs collision detection, integration and constraint solution
+            //Update physics & UI after reach the time step
+            //This functions performs collision detection, integration and constraint solution
             world.Step(timeStep, velocityIterations, positionIterations);
             
             //Update wall physics
@@ -312,21 +310,20 @@ int main()
             leftWall.setPosition(sf::Vector2f(view.getCenter().x - windowSizeX/2 + windowBorderSize/2, view.getCenter().y));
 
             leftWall.update();
-            // rightWall.update();
             topWall.update();
             bottomWall.update();
 
-            //update planets physics
+            //Update planets physics
             for(int i = 0; i < planets.size(); i++)
 			{
 				planets[i].update();
 				planets[i].exertGravity(player.getBody());
 			}               
 
-            //update player physics
+            //Update player physics
             player.update();
 			
-            //update background
+            //Update background
             if(background.getGlobalBounds().contains(player.getShape().getPosition()))
                 playerCurrentBackground = 1;
             else
@@ -338,7 +335,7 @@ int main()
             {
                 rightContraint = background.getPosition().x + (backgroundWidth * 3/4);
                 
-                //move the background if the player reach the certain point
+                //Move the background if the player reach the certain point
                 if(player.getShape().getPosition().x >= rightContraint)
                     background2.setPosition(background.getPosition().x + backgroundWidth, background.getPosition().y);
             }
@@ -346,23 +343,22 @@ int main()
             {
                 rightContraint = background2.getPosition().x + (backgroundWidth * 3/4);
 
-                //move the background if the player reach the certain point
+                //Move the background if the player reach the certain point
                 if(player.getShape().getPosition().x >= rightContraint)
                     background.setPosition(background2.getPosition().x + backgroundWidth, background2.getPosition().y);
             }
 
-            //update UI            
+            //Update UI            
             score = player.getShape().getPosition().x - player.getOriPosition().x;
+			if (score < 0) score = 0;
             scoreText.setString(std::to_string(score));
 			healthText.setString(std::to_string(player.getHealth()));
             
-            //update strength UI
+            //Update strength UI
             for(int i = 0, posY = 0; i < 5; i++, posY -= 20)
             {
                 sf::Vector2i pixelPosition = window.mapCoordsToPixel(sf::Vector2f(player.getShape().getPosition().x - 40.0f, player.getShape().getPosition().y + 10 + posY), view);
                 sf::Vector2f newPosition = window.mapPixelToCoords(pixelPosition, HUDView);
-                //sf::Vector2i pixelPosition = render.mapCoordsToPixel(sf::Vector2f(player.getShape().getPosition().x - 40.0f, player.getShape().getPosition().y - 40 + posY));
-                // sf::Vector2f newPosition = sf::RenderTarget::mapPixelToCoords(&pixelPosition, &HUDView);
                 strength[i].setPosition(newPosition);
             }
 
@@ -372,11 +368,11 @@ int main()
 				isPlaying = false;
 			}	
 			
-            //reset the time
+            //Reset the time
             timeElapsedSinceLastFrame -= timeStep;
         }
 
-        //set view
+        //Set view
         if(player.getShape().getPosition().x + 150.0f > view.getCenter().x && player.getShape().getPosition().y > windowSizeY/2 && player.getShape().getPosition().y < backgroundHeight - windowSizeY/2)
             view.setCenter(player.getShape().getPosition()+ sf::Vector2f (150.0f, 0.0f));
         else if(player.getShape().getPosition().y > windowSizeY/2 && player.getShape().getPosition().y > windowSizeY/2 && player.getShape().getPosition().y < backgroundHeight - windowSizeY/2)
@@ -385,33 +381,33 @@ int main()
             view.setCenter(sf::Vector2f(player.getShape().getPosition().x + 150.0f, view.getCenter().y));           
         window.setView(view);
 
-        //clear the screen
+        //Clear the screen
         window.clear(sf::Color(100, 149, 237));
 
-        //draw background
+        //Draw background
         window.draw(background);
         window.draw(background2);
 
         if(isPlaying)
         {
-            //draw player
+            //Draw player
             window.draw(player.getShape());
 
-            //draw planets
+            //Draw planets
             for(int i = 0; i < planets.size(); i++)
                 window.draw(planets[i].getShape());
 
-            //draw wall
+            //Draw wall
             window.draw(leftWall.getShape());
-            // window.draw(rightWall.getShape());
+            //Window.draw(rightWall.getShape());
             window.draw(topWall.getShape());
             window.draw(bottomWall.getShape());
         }
 
-        //set HUDView
+        //Set HUDView
         window.setView(HUDView);
         
-        //draw text
+        //Draw text
         if(isPlaying)
         {
             window.draw(sText);
@@ -455,7 +451,7 @@ int main()
                 window.draw(scoreTextV[i]);
         }
 
-        //draw strength
+        //Draw strength
         int temp = totalTimePressed;
 
         if(totalTimePressed > maxTimePressed)
@@ -467,6 +463,7 @@ int main()
         //Update the window
         window.display();
 		
+		//If player lose, restart the game (reset variables etc.)
 		if (!isPlaying && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) 
 		{
             drawScoreBoard = false;
@@ -507,7 +504,6 @@ int main()
             drawScoreBoard = true;
         }
     }
-
     return 0;
 }
 
@@ -540,58 +536,11 @@ void saveScore(int score)
     }
     else
         std::cout << "Unable to open file";
-    
-    // std::fstream fs;
-	// fs.open ("score.txt",std::fstream::in | std::fstream::out | std::fstream::app);
-	// std::string line;
-    // if (fs.is_open())
-    // {
-	// 	while (getline(fs,line))
-    //     {
-    //         if (!line.empty())
-	// 			fs << score << std::endl;
-    //     }
-    //     fs.close();
-    // }
-    // else 
-    //     std::cout << "Unable to open file";
-}
-
-bool checkSpawnLocationX(float posX, float playerPosX, std::vector<Planet> planets)
-{
-	//Remember the coordinates (0,0 is top left)
-	if (posX >= playerPosX + 32.0f || posX <= playerPosX - 32.0f)
-	{
-		for (int i = 0; i < planets.size(); i++)
-		{
-			//48.0 is the planet size
-			if (posX <= planets[i].getShape().getPosition().x + 80.0f 
-			|| posX >= planets[i].getShape().getPosition().x - 80.0f)
-				return true;
-		}
-	}
-	std:: cout << "PosX check failed";
-	return false;
 }
 
 bool sortFunction(int num1, int num2)
 {
     return (num2 < num1);
-}
-
-bool checkSpawnLocationY(float posY, float playerPosY, std::vector<Planet> planets)
-{
-	if (posY >= playerPosY + 32.0f || posY <= playerPosY - 32.0f)
-	{
-		for (int i = 0; i < planets.size(); i++)
-		{
-			if (posY <= planets[i].getShape().getPosition().y + 80.0f 
-			|| posY >= planets[i].getShape().getPosition().y - 80.0f)
-				return true;
-		}
-	}
-	std:: cout << "PosY check failed";
-	return false;	
 }
 
 bool checkSpawn(Player player, sf::Vector2f randomPosition, std::vector<Planet> planets)
