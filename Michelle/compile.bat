@@ -1,0 +1,1 @@
+g++ %1 %2 %3 %4 %5 -I"c:\SFML-2.5.1\include" -I"C:\Box2D" -L"C:\Box2D\Build\Box2D" -lBox2D -L"c:\SFML-2.5.1\lib" -lsfml-system -lsfml-window -lopengl32 -lglu32 -lsfml-graphics -lsfml-main -lsfml-audio -lsfml-network
