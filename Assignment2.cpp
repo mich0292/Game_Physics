@@ -352,8 +352,10 @@ int main()
         //set view
         if(player.getShape().getPosition().x + 150.0f > view.getCenter().x && player.getShape().getPosition().y > windowSizeY/2 && player.getShape().getPosition().y < backgroundHeight - windowSizeY/2)
             view.setCenter(player.getShape().getPosition()+ sf::Vector2f (150.0f, 0.0f));
-        else if(player.getShape().getPosition().y > windowSizeY/2 && player.getShape().getPosition().y < backgroundHeight - windowSizeY/2)
+        else if(player.getShape().getPosition().y > windowSizeY/2 && player.getShape().getPosition().y > windowSizeY/2 && player.getShape().getPosition().y < backgroundHeight - windowSizeY/2)
             view.setCenter(sf::Vector2f(view.getCenter().x, player.getShape().getPosition().y));
+        else if(player.getShape().getPosition().x + 150.0f > view.getCenter().x)
+            view.setCenter(sf::Vector2f(player.getShape().getPosition().x + 150.0f, view.getCenter().y));
         window.setView(view);
 
         //clear the screen
