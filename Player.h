@@ -10,6 +10,8 @@ class Player
     b2PolygonShape shape;
     b2FixtureDef fixture;
 	sf::Vector2f oriPosition;
+	int health;
+	float coolDown;
 
     public:
 
@@ -17,8 +19,11 @@ class Player
     void update();
     void updateAngle(float angle);
     void updateMovement(float force);
+	void startContact();
+	void endContact();
 	void setTexture(sf::Texture* texture);
     sf::Shape& getShape();
 	b2Body *getBody();
 	sf::Vector2f getOriPosition();
+	int getHealth();
 };

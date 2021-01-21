@@ -10,7 +10,8 @@ void Player::settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f pos
     player.setOrigin(sf::Vector2f(size.x/2, size.y/2));
 	
 	oriPosition = position;
-
+	health = 1;
+	
     bodyDef.position = b2Vec2(position.x/PIXEL_PER_METER, position.y/PIXEL_PER_METER);
     bodyDef.type = b2_dynamicBody;
 
@@ -24,6 +25,7 @@ void Player::settingUpPlayer(b2World& world, sf::Vector2f size, sf::Vector2f pos
 	body->CreateFixture(&fixture);
 	body->SetLinearDamping(0.5f);
 	body->SetAngularDamping(0.5f);
+	body->SetUserData(this);
     //body->SetFixedRotation(true);
 }
 
@@ -49,6 +51,16 @@ void Player::update()
     player.setPosition(body->GetPosition().x*PIXEL_PER_METER, body->GetPosition().y*PIXEL_PER_METER);
 }
 
+void Player::startContact()
+{
+
+}
+
+void Player::endContact()
+{
+	health--;
+}
+
 void Player::setTexture(sf::Texture* texture)
 {
     player.setTexture(texture, true);
@@ -67,6 +79,11 @@ b2Body *Player::getBody() {
 sf::Vector2f Player::getOriPosition()
 {
     return oriPosition;
+}
+
+int Player::getHealth()
+{
+	return health;
 }
 
 

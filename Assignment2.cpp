@@ -10,8 +10,9 @@
 #include "Planet.h"
 #include "Player.h"
 #include "Strength.h"
+#include "MyContactListener.cpp"
 
-//compile assignment2.cpp player.cpp wall.cpp planet.cpp strength.cpp
+//compile Assignment2.cpp Planet.cpp Strength.cpp Player.cpp Wall.cpp MyContactListener.cpp
 int main()
 {
     //Window creation
@@ -110,18 +111,38 @@ int main()
     background.setPosition(0, 0);
     background2.setPosition(4155, 0);
 
-    //Set up text
-    sf::Text text("Score: ", font, 30);
+    /*Set up text*/
+	//Score text
+    sf::Text sText("Score: ", font, 30);
     sf::Text scoreText;
     scoreText.setFont(font);
     scoreText.setCharacterSize(30);
     scoreText.setPosition(100, 0);
+	
+	//Health text
+	sf::Text hText("Health: ", font, 30);
+	hText.setPosition(660, 0);
+    sf::Text healthText;
+    healthText.setFont(font);
+    healthText.setCharacterSize(30);
+    healthText.setPosition(770, 0);
+	
+	//Lose text
+	sf::Text endText("You lost.", font, 50);	
+	sf::Text retryText("Press Enter to try again.", font, 30);
 
     //Player
     Player player;
     player.settingUpPlayer(world, sf::Vector2f(32.0f, 32.0f), sf::Vector2f(windowSizeX/2,backgroundHeight/2), sf::Color(255, 182, 193), sf::Color::Black, -1);
     player.setTexture(&playerTexture);
     int playerCurrentBackground = 1;
+	
+	//Collision
+	MyContactListener myContactListenerInstance;
+	world.SetContactListener(&myContactListenerInstance);
+	
+	//Lose
+	bool isPlaying = true;
 	
     //Create the wall
     Wall leftWall;
@@ -136,6 +157,7 @@ int main()
     //bottomWall.settingUpWall(world, sf::Vector2f(backgroundWidth - windowBorderSize, windowBorderSize), sf::Vector2f((background.getPosition().x + backgroundWidth)/2, background.getPosition().y + backgroundHeight - windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
     topWall.settingUpWall(world, sf::Vector2f(windowSizeX, windowBorderSize), sf::Vector2f(view.getCenter().x, background.getPosition().y + windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
     bottomWall.settingUpWall(world, sf::Vector2f(windowSizeX, windowBorderSize), sf::Vector2f(view.getCenter().x, background.getPosition().y + backgroundHeight - windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
+	
     //Creating and setting up strength (the boxes)
     for(int i = 0, posY = 0; i < 5; i++, posY -= 20)
     {
@@ -209,21 +231,34 @@ int main()
         }
 
         //Clock things
-        timeElapsedSinceLastFrame += deltaTime;
-        timeElapsedSinceLastSpawn += deltaTime;
+        if (isPlaying)
+		{
+			timeElapsedSinceLastFrame += deltaTime;
+			timeElapsedSinceLastSpawn += deltaTime;
+		}
 
         //create new planet
         if(timeElapsedSinceLastSpawn >= timeToSpawn)
         {            
             Planet temp;
-            int minX = player.getShape().getPosition().x - view.getSize().x/2;
-            int maxX = player.getShape().getPosition().x + view.getSize().x/2;
-            int minY = player.getShape().getPosition().y - view.getSize().y/2;
-            int maxY = player.getShape().getPosition().y + view.getSize().y/2;
+            int minX = player.getShape().getPosition().x - (view.getSize().x/2 - 150.0f);
+			int maxX = player.getShape().getPosition().x + (view.getSize().x/2 + 150.0f);
+			int minY = player.getShape().getPosition().y - view.getSize().y/2;
+			int maxY = player.getShape().getPosition().y + view.getSize().y/2;
             // //float tempX = rand() % windowSizeX;
             // //float tempY = rand() % windowSizeY;
             int tempX = rand() % (maxX - minX) + minX;
             int tempY = rand() % (maxY - minY) + minY;
+			/*
+			for(int i = 0; i < planets.size(); i++)
+			{
+				//Ensure the generated posX and posY of the new planet doesn't overlap 
+				//Can get stuck
+				while (tempX <= planets[i].getShape().getPosition().x + 48.0f && tempX >= planets[i].getShape().getPosition().x - 48.0f)
+					tempX = rand() % (maxX - minX) + minX;	
+				while (tempY <= planets[i].getShape().getPosition().y + 48.0f && tempX >= planets[i].getShape().getPosition().y - 48.0f)
+					tempY = rand() % (maxY - minY) + minY;
+			}*/
 			srand(time(0));
             int random = rand() % planetTextureV.size();
             temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
@@ -289,7 +324,19 @@ int main()
             //update UI            
             score = player.getShape().getPosition().x - player.getOriPosition().x;
             scoreText.setString(std::to_string(score));
+			healthText.setString(std::to_string(player.getHealth()));
             
+			//Lose condition
+			if (player.getHealth() <= 0)
+			{
+				isPlaying = false;
+				endText.setPosition(view.getCenter().x, view.getCenter().y);
+				retryText.setPosition(view.getCenter().x, view.getCenter().y);
+	
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {}
+					
+			}	
+			
             //reset the time
             timeElapsedSinceLastFrame -= timeStep;
         }
@@ -325,9 +372,17 @@ int main()
         window.setView(HUDView);
         
         //draw text
-        window.draw(text);
+        window.draw(sText);
         window.draw(scoreText);
-
+		window.draw(hText);
+        window.draw(healthText);
+		
+		if (!isPlaying)
+		{
+			window.draw(endText);
+			window.draw(retryText);
+		}
+		
         //draw strength
         int temp = totalTimePressed;
 
