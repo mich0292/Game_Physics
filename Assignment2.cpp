@@ -130,7 +130,7 @@ int main()
     Wall bottomWall;
 
     //Setting up the wall
-    leftWall.settingUpWall(world, sf::Vector2f(windowBorderSize, windowSizeY), sf::Vector2f(view.getCenter().x - windowSizeX/2, view.getCenter().y), sf::Color(100, 100, 100), sf::Color::Black, -1);
+    leftWall.settingUpWall(world, sf::Vector2f(windowBorderSize, windowSizeY), sf::Vector2f(view.getCenter().x - windowSizeX/2 + windowBorderSize/2, view.getCenter().y), sf::Color(100, 100, 100), sf::Color::Black, -1);
     //rightWall.settingUpWall(world, sf::Vector2f(windowBorderSize, windowSizeY-windowBorderSize*2), sf::Vector2f(windowSizeX-windowBorderSize/2,windowSizeY/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
     //topWall.settingUpWall(world, sf::Vector2f(backgroundWidth - windowBorderSize, windowBorderSize), sf::Vector2f((background.getPosition().x + backgroundWidth)/2, background.getPosition().y + windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
     //bottomWall.settingUpWall(world, sf::Vector2f(backgroundWidth - windowBorderSize, windowBorderSize), sf::Vector2f((background.getPosition().x + backgroundWidth)/2, background.getPosition().y + backgroundHeight - windowBorderSize/2), sf::Color(100, 100, 100), sf::Color::Black, -1);
@@ -242,7 +242,11 @@ int main()
             world.Step(timeStep, velocityIterations, positionIterations);
             
             //Update wall physics
-            // leftWall.update();
+            topWall.setPosition(sf::Vector2f(view.getCenter().x, background.getPosition().y + windowBorderSize/2));
+            bottomWall.setPosition(sf::Vector2f(view.getCenter().x, background.getPosition().y + backgroundHeight - windowBorderSize/2));
+            leftWall.setPosition(sf::Vector2f(view.getCenter().x - windowSizeX/2 + windowBorderSize/2, view.getCenter().y));
+
+            leftWall.update();
             // rightWall.update();
             topWall.update();
             bottomWall.update();
@@ -250,7 +254,7 @@ int main()
             //update planets physics
             for(int i = 0; i < planets.size(); i++)
 			{
-				 planets[i].update();
+				planets[i].update();
 				planets[i].exertGravity(player.getBody());
 			}               
 
@@ -285,19 +289,16 @@ int main()
             //update UI            
             score = player.getShape().getPosition().x - player.getOriPosition().x;
             scoreText.setString(std::to_string(score));
-
+            
             //reset the time
             timeElapsedSinceLastFrame -= timeStep;
         }
 
         //set view
-        view.setCenter(player.getShape().getPosition()+ sf::Vector2f (150.0f, 0.0f));
-        topWall.setPosition(sf::Vector2f(view.getCenter().x, background.getPosition().y + windowBorderSize/2));
-        bottomWall.setPosition(sf::Vector2f(view.getCenter().x, background.getPosition().y + backgroundHeight - windowBorderSize/2));
-        leftWall.setPosition(sf::Vector2f(view.getCenter().x - windowSizeX/2, view.getCenter().y));
-        std::cout << "position x: " << view.getCenter().x - windowSizeX/2 << std::endl;
-        std::cout << "position y: " << view.getCenter().y << std::endl;
-        std::cout << "player position y: " << player.getShape().getPosition().y << std::endl;
+        if(player.getShape().getPosition().x + 150.0f > view.getCenter().x)
+            view.setCenter(player.getShape().getPosition()+ sf::Vector2f (150.0f, 0.0f));
+        else
+            view.setCenter(sf::Vector2f(view.getCenter().x, player.getShape().getPosition().y));
         window.setView(view);
 
         //clear the screen
