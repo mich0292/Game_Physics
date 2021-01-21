@@ -20,6 +20,7 @@ void Planet::settingUpPlanet(b2World& world, float radius, sf::Vector2f position
 	
 	body = world.CreateBody(&bodyDef);
 	body->CreateFixture(&fixture);    
+	body->SetUserData(this);
 }
 
 void Planet::setTexture(sf::Texture* texture)
