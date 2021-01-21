@@ -329,9 +329,12 @@ int main()
 			//Lose condition
 			if (player.getHealth() <= 0)
 			{
+                std::cout << "Lose all health "<<std::endl;
 				isPlaying = false;
-				endText.setPosition(view.getCenter().x, view.getCenter().y);
-				retryText.setPosition(view.getCenter().x, view.getCenter().y);
+				//endText.setPosition(view.getCenter().x, view.getCenter().y);
+				//retryText.setPosition(view.getCenter().x, view.getCenter().y);
+                endText.setPosition(100, 100);
+                retryText.setPosition(100, 200);
 	
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {}
 					
@@ -379,6 +382,7 @@ int main()
 		
 		if (!isPlaying)
 		{
+           // std::cout << "drawText "<<std::endl;
 			window.draw(endText);
 			window.draw(retryText);
 		}
