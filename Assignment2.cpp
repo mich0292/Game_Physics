@@ -13,9 +13,10 @@
 #include "MyContactListener.cpp"
 
 void saveScore(int);
-void readScore();
 bool checkSpawnLocationX(float, float, std::vector<Planet>);
 bool checkSpawnLocationY(float, float, std::vector<Planet>);
+void readScore(std::vector<int>& scoreVector);
+bool sortFunction(int num1, int num2);
 
 //compile Assignment2.cpp Planet.cpp Strength.cpp Player.cpp Wall.cpp MyContactListener.cpp
 int main()
@@ -75,6 +76,13 @@ int main()
     std::vector<Planet> planets;
     std::vector<Strength> strength;
     std::vector<sf::Texture> planetTextureV;
+    std::vector<int> scores;
+    std::vector<sf::Text> scoreTextV;
+
+    //Score board
+    bool drawScoreBoard = false;
+    bool readFile = false;
+    bool saveFile = false;
 
     //load bgm
     sf::Music bgm;
@@ -136,6 +144,14 @@ int main()
 	//Lose text
 	sf::Text endText("You lost.", font, 50);	
 	sf::Text retryText("Press Enter to try again.", font, 30);
+    sf::Text retryText2("Press Enter to try again.", font, 30);
+    sf::Text checkScoreText("Press Tab to check score.", font, 30);
+    endText.setPosition(100, 100);
+    retryText.setPosition(100, 200);
+    retryText2.setPosition(220, 500);
+    checkScoreText.setPosition(100, 300);
+    sf::Text scoreBoardText("Score Board", font, 50);
+    scoreBoardText.setPosition(250, 10);
 
     //Player
     Player player;
@@ -246,31 +262,31 @@ int main()
         //create new planet
         if(timeElapsedSinceLastSpawn >= timeToSpawn)
         {            
-            // Planet temp;
-			// //150 view, 24 planet radius, 20 wall
-            // int minX = player.getShape().getPosition().x - view.getSize().x/2 + 194.0f;
-			// int maxX = player.getShape().getPosition().x + view.getSize().x/2 + 150.0f;
-			// int minY = player.getShape().getPosition().y - view.getSize().y/2;
-			// int maxY = player.getShape().getPosition().y + view.getSize().y/2;
-            // // //float tempX = rand() % windowSizeX;
-            // // //float tempY = rand() % windowSizeY;
-            // int tempX = rand() % (maxX - minX) + minX;
-            // int tempY = rand() % (maxY - minY) + minY;
-			// /*
-			// for(int i = 0; i < planets.size(); i++)
-			// {
-			// 	//Ensure the generated posX and posY of the new planet doesn't overlap 
-			// 	//Can get stuck
-			// 	while (tempX <= planets[i].getShape().getPosition().x + 48.0f && tempX >= planets[i].getShape().getPosition().x - 48.0f)
-			// 		tempX = rand() % (maxX - minX) + minX;	
-			// 	while (tempY <= planets[i].getShape().getPosition().y + 48.0f && tempX >= planets[i].getShape().getPosition().y - 48.0f)
-			// 		tempY = rand() % (maxY - minY) + minY;
-			// }*/
-			// srand(time(0));
-            // int random = rand() % planetTextureV.size();
-            // temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
-            // temp.setTexture(&planetTextureV[random]);
-            // planets.push_back(temp);
+            Planet temp;
+			//150 view, 24 planet radius, 20 wall
+            int minX = player.getShape().getPosition().x - view.getSize().x/2 + 194.0f;
+			int maxX = player.getShape().getPosition().x + view.getSize().x/2 + 150.0f;
+			int minY = player.getShape().getPosition().y - view.getSize().y/2;
+			int maxY = player.getShape().getPosition().y + view.getSize().y/2;
+            // //float tempX = rand() % windowSizeX;
+            // //float tempY = rand() % windowSizeY;
+            int tempX = rand() % (maxX - minX) + minX;
+            int tempY = rand() % (maxY - minY) + minY;
+			/*
+			for(int i = 0; i < planets.size(); i++)
+			{
+				//Ensure the generated posX and posY of the new planet doesn't overlap 
+				//Can get stuck
+				while (tempX <= planets[i].getShape().getPosition().x + 48.0f && tempX >= planets[i].getShape().getPosition().x - 48.0f)
+					tempX = rand() % (maxX - minX) + minX;	
+				while (tempY <= planets[i].getShape().getPosition().y + 48.0f && tempX >= planets[i].getShape().getPosition().y - 48.0f)
+					tempY = rand() % (maxY - minY) + minY;
+			}*/
+			srand(time(0));
+            int random = rand() % planetTextureV.size();
+            temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
+            temp.setTexture(&planetTextureV[random]);
+            planets.push_back(temp);
             
             //reset the time
             timeElapsedSinceLastSpawn -= timeToSpawn;
@@ -346,15 +362,7 @@ int main()
 			//Lose condition
 			if (player.getHealth() <= 0)
 			{
-                std::cout << "Lose all health "<<std::endl;
 				isPlaying = false;
-				//endText.setPosition(view.getCenter().x, view.getCenter().y);
-				//retryText.setPosition(view.getCenter().x, view.getCenter().y);
-                endText.setPosition(100, 100);
-                retryText.setPosition(100, 200);
-	
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {}
-					
 			}	
 			
             //reset the time
@@ -377,35 +385,69 @@ int main()
         window.draw(background);
         window.draw(background2);
 
-        //draw player
-        window.draw(player.getShape());
+        if(isPlaying)
+        {
+            //draw player
+            window.draw(player.getShape());
 
-        //draw planets
-        for(int i = 0; i < planets.size(); i++)
-            window.draw(planets[i].getShape());
+            //draw planets
+            for(int i = 0; i < planets.size(); i++)
+                window.draw(planets[i].getShape());
 
-        //draw wall
-        window.draw(leftWall.getShape());
-        // window.draw(rightWall.getShape());
-        window.draw(topWall.getShape());
-        window.draw(bottomWall.getShape());
+            //draw wall
+            window.draw(leftWall.getShape());
+            // window.draw(rightWall.getShape());
+            window.draw(topWall.getShape());
+            window.draw(bottomWall.getShape());
+        }
 
         //set HUDView
         window.setView(HUDView);
         
         //draw text
-        window.draw(sText);
-        window.draw(scoreText);
-		window.draw(hText);
-        window.draw(healthText);
-		
-		if (!isPlaying)
+        if(isPlaying)
+        {
+            window.draw(sText);
+            window.draw(scoreText);
+            window.draw(hText);
+            window.draw(healthText);
+        }		
+		else if(!drawScoreBoard)
 		{
-           // std::cout << "drawText "<<std::endl;
 			window.draw(endText);
 			window.draw(retryText);
-		}
-		
+            window.draw(checkScoreText);
+		}		
+        else
+        {
+            if(!readFile)
+            {                
+                readFile = true;
+                readScore(scores);
+                std::sort(scores.begin(), scores.end(), sortFunction);
+                
+                int size;
+                if(scores.size() > 10)
+                    size = 10;
+                else
+                    size = scores.size();
+
+                for(int i = 0, posY = 0; i < size; i++, posY += 30)
+                {
+                    sf::Text temp;
+                    temp.setFont(font);
+                    temp.setCharacterSize(30);
+                    temp.setPosition(250, 100 + posY);
+                    temp.setString(std::to_string(i+1) + "    " + std::to_string(scores[i]));
+                    scoreTextV.push_back(temp);
+                }
+            }            
+            window.draw(scoreBoardText);
+            window.draw(retryText2);
+            for(int i = 0; i < scoreTextV.size(); i++)
+                window.draw(scoreTextV[i]);
+        }
+
         //draw strength
         int temp = totalTimePressed;
 
@@ -420,8 +462,14 @@ int main()
 		
 		if (!isPlaying && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) 
 		{
+            drawScoreBoard = false;
+            readFile = false;
 			isPlaying = true;
-			saveScore(score);
+            scoreTextV.clear();
+            scores.clear();
+            if(!saveFile)
+			    saveScore(score);
+            saveFile = false;
 			score = 0;
             timeElapsedSinceLastFrame = 0;
             timeElapsedSinceLastIncrease = 0;
@@ -445,12 +493,18 @@ int main()
 			HUDView.reset(sf::FloatRect(0, 0, windowSizeX, windowSizeY));
 			bgm.play();	
 		}
+        else if(!isPlaying && sf::Keyboard::isKeyPressed(sf::Keyboard::Tab) && !drawScoreBoard)
+        {
+            saveFile = true;
+            saveScore(score);
+            drawScoreBoard = true;
+        }
     }
 
     return 0;
 }
 
-void readScore()
+void readScore(std::vector<int>& scoreVector)
 {
     std::string score;
     std::ifstream scoreFile("score.txt");
@@ -459,7 +513,7 @@ void readScore()
     {
         while ( getline (scoreFile,score) )
         {
-            std::cout << score << '\n';
+            scoreVector.push_back(std::stoi(score));
         }
         scoreFile.close();
     }
@@ -468,18 +522,32 @@ void readScore()
 
 void saveScore(int score)
 {
-	std::fstream fs;
-	fs.open ("score.txt",std::fstream::in | std::fstream::out | std::fstream::app);
-	std::string line;
-    if (fs.is_open())
+    std::ofstream file;
+
+    file.open("score.txt", std::ios_base::app);
+
+    if(file.is_open())
     {
-		while (getline(fs,line))
-			if (!line.empty())
-				fs << score << std::endl;
-        fs.close();
+        file << score << std::endl;
+        file.close();
     }
-    else 
+    else
         std::cout << "Unable to open file";
+    
+    // std::fstream fs;
+	// fs.open ("score.txt",std::fstream::in | std::fstream::out | std::fstream::app);
+	// std::string line;
+    // if (fs.is_open())
+    // {
+	// 	while (getline(fs,line))
+    //     {
+    //         if (!line.empty())
+	// 			fs << score << std::endl;
+    //     }
+    //     fs.close();
+    // }
+    // else 
+    //     std::cout << "Unable to open file";
 }
 
 bool checkSpawnLocationX(float posX, float playerPosX, std::vector<Planet> planets)
