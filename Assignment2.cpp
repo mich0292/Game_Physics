@@ -114,10 +114,11 @@ int main()
     /*Set up text*/
 	//Score text
     sf::Text sText("Score: ", font, 30);
+	sText.setPosition(20, 0);
     sf::Text scoreText;
     scoreText.setFont(font);
     scoreText.setCharacterSize(30);
-    scoreText.setPosition(100, 0);
+    scoreText.setPosition(120, 0);
 	
 	//Health text
 	sf::Text hText("Health: ", font, 30);
@@ -241,8 +242,9 @@ int main()
         if(timeElapsedSinceLastSpawn >= timeToSpawn)
         {            
             Planet temp;
-            int minX = player.getShape().getPosition().x - (view.getSize().x/2 - 150.0f);
-			int maxX = player.getShape().getPosition().x + (view.getSize().x/2 + 150.0f);
+			//150 view, 24 planet radius, 20 wall
+            int minX = player.getShape().getPosition().x - view.getSize().x/2 + 194.0f;
+			int maxX = player.getShape().getPosition().x + view.getSize().x/2 + 150.0f;
 			int minY = player.getShape().getPosition().y - view.getSize().y/2;
 			int maxY = player.getShape().getPosition().y + view.getSize().y/2;
             // //float tempX = rand() % windowSizeX;
