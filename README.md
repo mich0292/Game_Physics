@@ -1,4 +1,4 @@
-# Game_Physics 🌌🚀 Space Battle
+# Game_Physics 🌌🚀 Space Journey
 
 ![Game Just Started](https://github.com/mich0292/Game_Physics/blob/51ac23eb160a2f651e0c7878f30723fcdfc2871e/Screenshots/Starting%20Game.png)
 
