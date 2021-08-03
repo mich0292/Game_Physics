@@ -4,9 +4,9 @@
 
 *Note: This game uses Box2D engine.*
 
-* The game, Space Battle is an endless runner-style game similar to Jetpack Joyride, Tiny Wings. 
-* The player has to travel as far right as possible to obtain higher scores. 
-* The game stores all the scores that has been accumulated throughout different play sessions to emulate the old arcade style of gameplay.
+The game, Space Battle is an endless runner-style game similar to Jetpack Joyride, Tiny Wings.\
+The player has to travel as far right as possible to obtain higher scores.\
+The game stores all the scores that has been accumulated throughout different play sessions to emulate the old arcade style of gameplay.
 
 **Controls**
   Keys	|   In-game action
