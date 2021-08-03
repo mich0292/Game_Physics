@@ -43,4 +43,4 @@ Getting too near to the planets will cause the player to be pulled towards the p
 3.  Scoreboard – Our game has a scoreboard which has all the previously obtained scores
 
 
-***Please check out our [documentation](https://github.com/mich0292/Game_Physics/blob/6957b9effd1935083e4262de4c4bd5b76ef51d75/(1171100973_1171101517)%20WrittenReport.pdf) for more details! 😀***
+> ***Please check out our [documentation](https://github.com/mich0292/Game_Physics/blob/6957b9effd1935083e4262de4c4bd5b76ef51d75/(1171100973_1171101517)%20WrittenReport.pdf) for more details! 😀***
