@@ -23,11 +23,10 @@ Contacts #2 : 016-5727809 michelle123679@gmail.com
 #include "MyContactListener.cpp"
 
 void saveScore(int);
-bool checkSpawnLocationX(float, float, std::vector<Planet>);
-bool checkSpawnLocationY(float, float, std::vector<Planet>);
 void readScore(std::vector<int>& scoreVector);
 bool sortFunction(int num1, int num2);
 bool checkSpawn(Player player, sf::Vector2f randomPosition, std::vector<Planet>);
+void RemovePlanets(std::vector<Planet>& planets, Wall leftWall, b2World& world);
 
 int main()
 {
@@ -55,9 +54,11 @@ int main()
     int32 positionIterations = 8;
     sf::Clock fixedUpdateClock;
     
-    //Spawn planet clock
+    //Planet clock
     float timeToSpawn = 1.0f;
     float timeElapsedSinceLastSpawn = 0;
+    float timeToRemovePlanet = 5.0f;
+    float timeElapsedSinceLastRemove = 0;
 
     //Strength clock & variables
     float timeToIncreaseStrength = 0.3f;
@@ -276,12 +277,13 @@ int main()
 		{
 			timeElapsedSinceLastFrame += deltaTime;
 			timeElapsedSinceLastSpawn += deltaTime;
+            timeElapsedSinceLastRemove += deltaTime;
 		}
 
         //Create new planet
         if(timeElapsedSinceLastSpawn >= timeToSpawn)
         {            
-            Planet temp;
+            int chance = 5;            
 			//150 view, 24 planet radius, 20 wall
             int minX = player.getShape().getPosition().x - view.getSize().x/2 + 194.0f;
 			int maxX = player.getShape().getPosition().x + view.getSize().x/2 + 150.0f;
@@ -291,22 +293,34 @@ int main()
             int tempX = rand() % (maxX - minX) + minX;
             int tempY = rand() % (maxY - minY) + minY;
 
-            while(!checkSpawn(player, sf::Vector2f(tempX, tempY), planets))
+            while(!checkSpawn(player, sf::Vector2f(tempX, tempY), planets) && chance > 0)
             {
+                chance--;
                 tempX = rand() % (maxX - minX) + minX;
                 tempY = rand() % (maxY - minY) + minY;
             }
 
-			srand(time(0));
-            int random = rand() % planetTextureV.size();
-            temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
-            temp.setTexture(&planetTextureV[random]);
-            planets.push_back(temp);
+            if(chance > 0)
+            {
+                srand(time(0));
+                Planet temp;
+                int random = rand() % planetTextureV.size();
+                temp.settingUpPlanet(world, 48.0f, sf::Vector2f(tempX, tempY), sf::Color(100, 100, 100), sf::Color::Black, -1);
+                temp.setTexture(&planetTextureV[random]);
+                planets.push_back(temp);
+            }  
             
             //Reset the time
             timeElapsedSinceLastSpawn -= timeToSpawn;
         }
 		
+        //Delete planets that passed by player
+        if(timeElapsedSinceLastRemove >= timeToRemovePlanet)
+        {
+            RemovePlanets(planets, leftWall, world);
+            timeElapsedSinceLastRemove -= timeToRemovePlanet;
+        }
+
 		/******************************************************************************    
 		*************   		  Physics Update     					 *************    
 		******************************************************************************/        
@@ -491,6 +505,7 @@ int main()
             timeElapsedSinceLastIncrease = 0;
             timeElapsedSinceLastSpawn = 0;
             totalTimePressed = 0;
+            timeElapsedSinceLastRemove = 0;
             playerCurrentBackground = 1;
 
             background.setPosition(0, 0);
@@ -553,6 +568,18 @@ void saveScore(int score)
 bool sortFunction(int num1, int num2)
 {
     return (num2 < num1);
+}
+
+void RemovePlanets(std::vector<Planet>& planets, Wall leftWall, b2World& world)
+{
+    for(int i = 0; i < planets.size(); i++)
+    {
+        if(planets[i].getShape().getPosition().x < leftWall.getShape().getPosition().x)
+        {
+            world.DestroyBody(planets[i].getBody());
+            planets.erase(planets.begin()+i);
+        }            
+    }
 }
 
 bool checkSpawn(Player player, sf::Vector2f randomPosition, std::vector<Planet> planets)
