@@ -15,7 +15,9 @@ The game stores all the scores that has been accumulated throughout different pl
    ↓	|   Clockwise turn
   Space |	Strength of the trajectory
 
-As the player moves, they must watch out for the planets since they are randomly generated. Colliding against the planet with reduce the player’s health by 1. The player only starts with 5 health. Getting too near to the planets will cause the player to be pulled towards the planets.
+As the player moves, they must watch out for the planets since they are randomly generated.\ 
+Colliding against the planet with reduce the player’s health by 1. The player only starts with 5 health.\ 
+Getting too near to the planets will cause the player to be pulled towards the planets.
 
 **Mechanics:**
 1.  Control the angle of the ship’s trajectory
