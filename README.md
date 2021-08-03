@@ -29,7 +29,7 @@ Getting too near to the planets will cause the player to be pulled towards the p
 1.  Ensure that you are at the directory of the game folder in cmd. 
 	
 2.  To compile our game and generate an executable file, please copy the following line and paste it to your cmd:
-    ```compile Main.cpp Planet.cpp Strength.cpp Player.cpp Wall.cpp MyContactListener.cpp
+    ```compile Main.cpp Planet.cpp Strength.cpp Player.cpp Wall.cpp MyContactListener.cpp```
 
 3.  Type a in the cmd to run our game
 
