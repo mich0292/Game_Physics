@@ -18,10 +18,12 @@ Space   |	Strength of the trajectory
 
 ![Charge Bar](https://github.com/mich0292/Game_Physics/blob/51ac23eb160a2f651e0c7878f30723fcdfc2871e/Screenshots/Mechanics%20-%20Charging%20Bar.png)
 
-**How to install our game**
+**How to install our game?**
 1.	Ensure that you are at the directory of the game folder in cmd. 
 2.	To compile our game and generate an executable file, please copy the following line and paste it to your cmd:
     compile Main.cpp Planet.cpp Strength.cpp Player.cpp Wall.cpp MyContactListener.cpp
 3.	Type a in the cmd to run our game
 
 ![How to Install](https://github.com/mich0292/Game_Physics/blob/d3a4ca847372713c0c5966ee6d178bff7fcfcb6f/Screenshots/How%20to%20Install.png)
+
+Please check out our documentation for more details! 😋
