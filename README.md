@@ -1,9 +1,8 @@
 # Game_Physics 🌌🚀 Space Battle
 
-*Note: This game uses Box2D engine.*
-
 ![Game Just Started](https://github.com/mich0292/Game_Physics/blob/51ac23eb160a2f651e0c7878f30723fcdfc2871e/Screenshots/Starting%20Game.png)
 
+*Note: This game uses Box2D engine.*
 
 The game, Space Battle is an endless runner-style game similar to Jetpack Joyride, Tiny Wings.\
 The player has to travel as far right as possible to obtain higher scores.\
